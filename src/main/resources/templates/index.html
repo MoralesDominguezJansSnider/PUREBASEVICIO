@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Infantes - Nutrición IA</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family: 'Segoe UI', sans-serif;
+            background:#f4f7fb;
+        }
+
+        .split-screen{
+            display:flex;
+            height:100vh;
+        }
+
+        /* IZQUIERDA */
+        .left{
+            width:70%;
+            padding:40px;
+            background:linear-gradient(to bottom right,#eef6ff,#ffffff);
+            overflow-y:auto;
+        }
+
+        /* DERECHA */
+        .right{
+            width:30%;
+            background:white;
+            border-left:1px solid #ddd;
+            padding:25px;
+            overflow-y:auto;
+        }
+
+        h1{
+            color:#1e293b;
+            margin-bottom:10px;
+            font-size:32px;
+        }
+
+        .subtitulo{
+            color:#64748b;
+            margin-bottom:30px;
+        }
+
+        .panel-seleccion{
+            background:white;
+            border-radius:18px;
+            padding:30px;
+            box-shadow:0 4px 15px rgba(0,0,0,0.08);
+            min-height:350px;
+        }
+
+        .mensaje-inicial{
+            text-align:center;
+            color:#94a3b8;
+            margin-top:100px;
+            font-size:18px;
+        }
+
+        .info-estudiante{
+            margin-bottom:25px;
+        }
+
+        .info-estudiante h2{
+            color:#0f172a;
+            margin-bottom:15px;
+            font-size:28px;
+        }
+
+        .datos{
+            line-height:2;
+            color:#334155;
+            font-size:16px;
+        }
+
+        .comidas{
+            margin-top:20px;
+            background:#f8fafc;
+            padding:18px;
+            border-radius:12px;
+        }
+
+        .comidas ul{
+            margin-left:20px;
+            margin-top:10px;
+        }
+
+        .btn-recomendar{
+            margin-top:25px;
+            background:linear-gradient(to right,#2563eb,#1d4ed8);
+            color:white;
+            border:none;
+            padding:14px 28px;
+            border-radius:12px;
+            cursor:pointer;
+            font-size:15px;
+            font-weight:bold;
+            transition:0.3s;
+        }
+
+        .btn-recomendar:hover{
+            transform:translateY(-2px);
+            box-shadow:0 6px 15px rgba(37,99,235,0.3);
+        }
+
+        .recomendacion{
+            margin-top:25px;
+            background:#fffbea;
+            border-left:5px solid #f59e0b;
+            padding:20px;
+            border-radius:12px;
+            line-height:1.7;
+            display:none;
+        }
+
+        .loading{
+            color:#2563eb;
+            font-style:italic;
+        }
+
+        /* LISTA DERECHA */
+        .titulo-right{
+            font-size:22px;
+            margin-bottom:20px;
+            color:#1e293b;
+        }
+
+        .estudiante-card{
+            background:#f8fafc;
+            border-radius:14px;
+            padding:18px;
+            margin-bottom:15px;
+            cursor:pointer;
+            transition:0.3s;
+            border:2px solid transparent;
+        }
+
+        .estudiante-card:hover{
+            background:#eff6ff;
+            border-color:#3b82f6;
+            transform:translateY(-2px);
+        }
+
+        .estudiante-card.active{
+            border-color:#2563eb;
+            background:#dbeafe;
+        }
+
+        .nombre{
+            font-weight:bold;
+            color:#0f172a;
+            margin-bottom:8px;
+            font-size:17px;
+        }
+
+        .detalle{
+            color:#64748b;
+            line-height:1.6;
+            font-size:14px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="split-screen">
+
+    <!-- IZQUIERDA -->
+    <div class="left">
+
+        <h1>🤖 Nutrición Inteligente</h1>
+        <p class="subtitulo">
+            Selecciona un estudiante para generar recomendaciones nutricionales personalizadas.
+        </p>
+
+        <div class="panel-seleccion" id="panelSeleccion">
+
+            <div class="mensaje-inicial">
+                👈 Selecciona un estudiante del panel derecho
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- DERECHA -->
+    <div class="right">
+
+        <div class="titulo-right">
+            📋 Estudiantes
+        </div>
+
+        <div th:each="e : ${estudiantes}"
+             class="estudiante-card"
+             th:data-id="${e.id}"
+             th:data-nombre="${e.nombre}"
+             th:data-apellido="${e.apellido}"
+             th:data-edad="${e.edad}"
+             th:data-nivel="${e.nivelSocioeconomico}"
+             th:data-hermanos="${e.numHermanos}">
+
+            <div class="nombre">
+                [[${e.nombre}]] [[${e.apellido}]]
+            </div>
+
+            <div class="detalle">
+                Edad: [[${e.edad}]] años <br>
+                Nivel: [[${e.nivelSocioeconomico}]]
+            </div>
+
+            <!-- comidas ocultas -->
+            <div style="display:none;" class="lista-comidas">
+                <span th:each="c : ${e.comidas}">
+                    [[${c.descripcion}]],
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+$(document).ready(function(){
+
+    let estudianteSeleccionado = null;
+
+    $(".estudiante-card").click(function(){
+
+        $(".estudiante-card").removeClass("active");
+        $(this).addClass("active");
+
+        let id = $(this).data("id");
+        let nombre = $(this).data("nombre");
+        let apellido = $(this).data("apellido");
+        let edad = $(this).data("edad");
+        let nivel = $(this).data("nivel");
+        let hermanos = $(this).data("hermanos");
+
+        let comidas = $(this).find(".lista-comidas").text();
+
+        estudianteSeleccionado = id;
+
+        $("#panelSeleccion").html(`
+
+            <div class="info-estudiante">
+
+                <h2>👦 ${nombre} ${apellido}</h2>
+
+                <div class="datos">
+                    <strong>📅 Edad:</strong> ${edad} años <br>
+                    <strong>💰 Nivel socioeconómico:</strong> ${nivel} <br>
+                    <strong>👨‍👩‍👧 Hermanos:</strong> ${hermanos}
+                </div>
+
+                <div class="comidas">
+                    <strong>🍽️ Alimentos consumidos:</strong>
+
+                    <ul>
+                        <li>${comidas}</li>
+                    </ul>
+                </div>
+
+                <button class="btn-recomendar" id="btnIA">
+                    🧠 Generar Recomendación IA
+                </button>
+
+                <div class="recomendacion" id="respuestaIA"></div>
+
+            </div>
+
+        `);
+
+    });
+
+    $(document).on("click","#btnIA",function(){
+
+        $("#respuestaIA")
+            .show()
+            .html("<div class='loading'>⏳ Generando recomendaciones con IA...</div>");
+
+        $.ajax({
+            url:"/recomendar",
+            type:"POST",
+            data:{
+                estudianteId: estudianteSeleccionado
+            },
+
+            success:function(response){
+
+                $("#respuestaIA").html(
+                    "<strong>✅ Recomendación nutricional:</strong><br><br>"
+                    + response.replace(/\n/g,"<br>")
+                );
+
+            },
+
+            error:function(){
+
+                $("#respuestaIA").html(
+                    "<strong>❌ Error:</strong> No se pudo conectar con la IA."
+                );
+
+            }
+
+        });
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
