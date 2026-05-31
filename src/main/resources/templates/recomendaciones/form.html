@@ -1,0 +1,33 @@
+<!--<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Recomendaciones IA</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+    <div th:replace="~{fragments :: header}"></div>
+    <div th:replace="~{fragments :: navbar}"></div>
+
+    <div class="container">
+        <div class="card">
+
+            <h1>Generar recomendaciones para <span th:text="${estudiante.nombreCompleto}"></span></h1>
+            <h3>Datos del estudiante</h3>
+            <ul>
+                <li>Edad: <span th:text="${estudiante.edad}"></span></li>
+                <li>Sexo: <span th:text="${estudiante.sexo}"></span></li>
+                <li>Nivel socioeconómico: <span th:text="${estudiante.nivelSocioeconomico}"></span></li>
+                <li>Ubicación: <span th:text="${estudiante.ubicacion}"></span></li>
+                <li>Cultura alimenticia: <span th:text="${estudiante.culturaAlimenticia}"></span></li>
+            </ul>
+            <form th:action="@{/recomendaciones/generar}" method="post">
+                <input type="hidden" name="estudianteId" th:value="${estudiante.id}" />
+                <button type="submit" class="btn">Generar recomendaciones con Gemini AI</button>
+            </form>
+            <a th:href="@{/estudiantes/{id}(id=${estudiante.id})}" class="btn">Volver</a>
+        </div>
+    </div>
+</body>
+
+</html>

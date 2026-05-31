@@ -1,0 +1,19 @@
+nombre,categoria,descripcion,hierro,proteinas,calcio,vitamina_a,vitamina_c,imagen_url
+Pollo a la brasa,CARNES,Pollo asado típico peruano fuente de proteínas,1.5,27.0,12,15,2.0,/img/pollo a la brasa.jpg
+Hígado de res,CARNES,Víscera muy rica en hierro y vitamina A,6.5,20.4,5,5000,1.5,/img/higado de res.jpg
+Pescado bonito,PESCADOS,Pescado azul rico en omega-3 y proteínas,1.2,22.0,12,10,0.5,/img/pescado bonito.jpg
+Quinua,CEREALES,Cereal andino alto en proteínas y minerales,4.6,14.1,47,0,0.0,/img/quinua.jpg
+Avena,CEREALES,Cereal integral con fibra y hierro,4.7,16.9,54,0,0.0,/img/avena.jpg
+Huevo entero,LACTEOS,Alimento completo con proteínas y vitamina A,2.7,12.6,56,140,0.0,/img/huevo entero.jpg
+Leche entera,LACTEOS,Lácteo fuente de calcio y proteínas,0.1,3.2,120,28,0.0,/img/leche entera.jpg
+Plátano,FRUTAS,Fruta energética rica en potasio,0.3,1.1,5,0,8.7,/img/platano.jpg
+Manzana,FRUTAS,Fruta con fibra y vitamina C,0.1,0.3,6,0,4.6,/img/manzana.jpg
+Zanahoria,VERDURAS,Rica en betacaroteno (provitamina A),0.3,0.9,33,835,5.9,/img/zanahoria.jpg
+Brócoli,VERDURAS,Vegetal con hierro y vitamina C,0.7,2.8,47,31,89.2,/img/brocoli.jpg
+Papa cocida,CEREALES,Tubérculo básico en la dieta peruana,0.4,1.7,5,0,7.4,/img/papa cocida.jpg
+Camote,VERDURAS,Tubérculo dulce rico en vitamina A,0.6,1.6,30,709,2.4,/img/camote.jpg
+Carne de res magra,CARNES,Carne roja fuente de hierro hemo,2.6,26.0,6,0,0.0,/img/carne de res magra.jpg
+Trucha,PESCADOS,Pescado de río rico en proteínas,0.4,19.0,12,0,0.5,/img/trucha.jpg
+Yogur natural,LACTEOS,Lácteo fermentado con calcio,0.1,3.5,120,0,0.0,/img/yogur natural.jpg
+Palta,FRUTAS,Fruta con grasas saludables y vitamina E,0.5,2.0,12,7,10.0,/img/palta.jpg
+Papaya,FRUTAS,Fruta tropical rica en vitamina C,0.2,0.5,20,0,60.9,/img/papaya.jpg

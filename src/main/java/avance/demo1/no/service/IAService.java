@@ -1,4 +1,4 @@
-package avance.demo1.service;
+/*package avance.demo1.service;
 
 import avance.demo1.model.Comida;
 import avance.demo1.model.Estudiante;
@@ -103,4 +103,4 @@ public class IAService {
                    "\n\nRevisa la consola de Spring Boot para más detalles.";
         }
     }
-}
+}  */

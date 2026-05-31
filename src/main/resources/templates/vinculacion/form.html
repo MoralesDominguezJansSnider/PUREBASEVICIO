@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Vinculación</title>    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+    <div th:replace="~{fragments :: header}"></div>
+    <div th:replace="~{fragments :: navbar}"></div>
+
+    <div class="container">
+        <div class="card">
+    <h1>Vincular con Padre de Familia</h1>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <form th:action="@{/vinculacion}" method="post">
+        <label>Código de vinculación:</label>
+        <input type="text" name="codigo" required>
+        <button type="submit" class="btn">Vincular</button>
+    </form>
+    <a th:href="@{/}" class="btn">Volver</a>
+        </div>
+    </div>
+</body>
+</html>

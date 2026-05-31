@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Recomendaciones IA</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <style>
+        .split-screen {
+            display: flex;
+            min-height: 70vh;
+            margin: 20px 0;
+        }
+        .left {
+            width: 70%;
+            padding: 25px;
+            background: #f4f9f4;
+            border-radius: 12px;
+            margin-right: 20px;
+        }
+        .right {
+            width: 30%;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .info-estudiante h2 {
+            color: #2e7d32;
+        }
+        .datos {
+            line-height: 2;
+            margin-bottom: 20px;
+        }
+        .comidas {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .btn-recomendar {
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        .btn-recomendar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(46,125,50,0.4);
+        }
+        .recomendacion {
+            margin-top: 25px;
+            background: #fffbea;
+            border-left: 5px solid #f59e0b;
+            padding: 20px;
+            border-radius: 12px;
+            white-space: pre-wrap;
+            display: none;  /* oculto hasta que haya resultado */
+        }
+        .loading {
+            color: #2e7d32;
+            font-style: italic;
+            margin-top: 15px;
+        }
+        .estudiante-card {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 2px solid transparent;
+            transition: 0.3s;
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+        .estudiante-card:hover {
+            background: #e8f5e9;
+            border-color: #4caf50;
+            transform: translateY(-2px);
+        }
+        .estudiante-card.active {
+            border-color: #2e7d32;
+            background: #dcedc8;
+        }
+        .estudiante-card .nombre {
+            font-weight: bold;
+            font-size: 17px;
+            color: #1b5e20;
+        }
+        .estudiante-card .detalle {
+            color: #64748b;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Fragmentos de cabecera y navegación -->
+    <div th:replace="~{fragments :: header}"></div>
+    <div th:replace="~{fragments :: navbar}"></div>
+
+    <div class="container">
+        <div class="split-screen">
+
+            <!-- ========== PANEL IZQUIERDO ========== -->
+            <div class="left">
+                <h1>🤖 Nutrición Inteligente</h1>
+                <p style="color:#64748b; margin-bottom:25px;">
+                    Genera recomendaciones personalizadas con Gemini AI.
+                </p>
+
+                <!-- Información del estudiante actual -->
+                <div class="info-estudiante" id="infoEstudiante">
+                    <h2 th:text="'👦 ' + ${estudiante.nombreCompleto}"></h2>
+                    <div class="datos">
+                        <strong>📅 Edad:</strong> <span th:text="${estudiante.edad}"></span> años<br>
+                        <strong>⚥ Sexo:</strong> <span th:text="${estudiante.sexo}"></span><br>
+                        <strong>💰 Nivel socioeconómico:</strong> <span th:text="${estudiante.nivelSocioeconomico}"></span><br>
+                        <strong>📍 Ubicación:</strong> <span th:text="${estudiante.ubicacion}"></span><br>
+                        <strong>🍲 Cultura alimenticia:</strong> <span th:text="${estudiante.culturaAlimenticia}"></span>
+                    </div>
+
+                    <!-- Últimas comidas -->
+                    <div class="comidas">
+                        <strong>🍽️ Comidas recientes:</strong>
+                        <ul>
+                            <th:block th:if="${not #lists.isEmpty(estudiante.comidas)}">
+                                <li th:each="c : ${estudiante.comidas}" th:text="${c.alimento} + ' (' + ${c.tipo} + ')'"></li>
+                            </th:block>
+                            <li th:unless="${not #lists.isEmpty(estudiante.comidas)}">Sin comidas registradas</li>
+                        </ul>
+                    </div>
+
+                    <!-- Campo oculto con el ID del estudiante para el script -->
+                    <input type="hidden" id="estudianteId" th:value="${estudiante.id}">
+
+                    <!-- Botón para generar con AJAX -->
+                    <button class="btn-recomendar" id="btnGenerar">
+                        🧠 Generar Recomendación IA
+                    </button>
+
+                    <!-- Zona de resultado -->
+                    <div class="recomendacion" id="respuestaIA"></div>
+                    <div class="loading" id="loadingIA" style="display:none;">
+                        ⏳ Generando recomendaciones con Gemini AI...
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== PANEL DERECHO ========== -->
+            <div class="right">
+                <h2 style="font-size:22px; margin-bottom:20px; color:#1e293b;">📋 Mis Estudiantes</h2>
+                <th:block th:each="est : ${estudiantes}">
+                    <a th:href="@{/recomendaciones/{id}(id=${est.id})}"
+                       class="estudiante-card"
+                       th:classappend="${est.id == estudiante.id} ? 'active'">
+                        <div class="nombre" th:text="${est.nombreCompleto}"></div>
+                        <div class="detalle">
+                            Edad: <span th:text="${est.edad}"></span> años<br>
+                            Nivel: <span th:text="${est.nivelSocioeconomico}"></span>
+                        </div>
+                    </a>
+                </th:block>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Fragmento del footer -->
+    <div th:replace="~{fragments :: footer}"></div>
+
+    <!-- Script para llamada AJAX sin errores de Thymeleaf -->
+    <script>
+        document.getElementById('btnGenerar').addEventListener('click', function() {
+            const respuestaDiv = document.getElementById('respuestaIA');
+            const loadingDiv = document.getElementById('loadingIA');
+            const estudianteId = document.getElementById('estudianteId').value; // tomado del input oculto
+
+            respuestaDiv.style.display = 'none';
+            loadingDiv.style.display = 'block';
+
+            fetch('/recomendaciones/generar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'estudianteId=' + encodeURIComponent(estudianteId)
+            })
+            .then(response => response.text())
+            .then(texto => {
+                loadingDiv.style.display = 'none';
+                respuestaDiv.style.display = 'block';
+                respuestaDiv.innerHTML = '<strong>✅ Recomendación nutricional:</strong><br><br>' + texto.replace(/\n/g, '<br>');
+            })
+            .catch(error => {
+                loadingDiv.style.display = 'none';
+                respuestaDiv.style.display = 'block';
+                respuestaDiv.innerHTML = '<strong>❌ Error:</strong> No se pudo conectar con la IA.';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Biblioteca de Alimentos Nutritivos</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+
+<body>
+    <div th:replace="~{fragments :: header}"></div>
+    <div th:replace="~{fragments :: navbar}"></div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Biblioteca de Alimentos Nutritivos</h2>
+            <form th:action="@{/alimentos}" method="get" style="margin-bottom:20px;">
+                <input type="text" name="buscar" placeholder="Buscar alimento...">
+                <select name="categoria">
+                    <option value="">Todas las categorías</option>
+                    <option th:each="cat : ${categorias}" th:value="${cat}" th:text="${cat}"></option>
+                </select>
+                <button type="submit" class="btn">Filtrar</button>
+            </form>
+
+            <div class="alimentos-grid">
+                <div th:each="alim : ${alimentos}" class="alimento-card">
+                    <img th:src="${alim.imagenUrl}" th:alt="${alim.nombre}"
+     style="width:100%; height:150px; object-fit:cover; background:#e8f5e9;">
+                    <div class="info">
+                        <h3 th:text="${alim.nombre}"></h3>
+                        <p th:text="${alim.descripcion}"></p>
+                        <ul class="nutrientes">
+                            <li>Hierro: <span th:text="${alim.hierro}"></span>%</li>
+                            <li>Proteínas: <span th:text="${alim.proteinas}"></span>%</li>
+                            <li>Calcio: <span th:text="${alim.calcio}"></span>%</li>
+                            <li>Vitamina A: <span th:text="${alim.vitaminaA}"></span>%</li>
+                            <li>Vitamina C: <span th:text="${alim.vitaminaC}"></span>%</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments :: footer}"></div>
+</body>
+
+</html>

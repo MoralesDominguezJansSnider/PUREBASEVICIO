@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Registrar Comida</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+    <div th:replace="~{fragments :: header}"></div>
+    <div th:replace="~{fragments :: navbar}"></div>
+
+    <div class="container">
+        <div class="card">
+            <h1>Registrar comida para <span th:text="${comida.estudiante.nombreCompleto}"></span></h1>
+            <form th:action="@{/comidas/guardar}" th:object="${comida}" method="post">
+                <input type="hidden" th:field="*{estudiante.id}" />
+                <label>Fecha:</label>
+                <input type="date" th:field="*{fecha}" required><br>
+                <label>Tipo de comida:</label>
+                <select th:field="*{tipo}" required>
+                    <option th:each="t : ${tipos}" th:value="${t}" th:text="${t}"></option>
+                </select><br>
+                <label>Alimento consumido:</label>
+                <input type="text" th:field="*{alimento}" placeholder="Ej: Lentejas, Pollo, etc." required><br>
+                <label>Porciones (en gramos o unidades):</label>
+                <input type="number" th:field="*{porciones}" step="0.1" min="0.1"><br>
+                <button type="submit" class="btn">Guardar</button>
+                <a th:href="@{/comidas/{id}(id=${comida.estudiante.id})}" class="btn">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Registrar Análisis Hematológico</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+    <div th:replace="~{fragments :: header}"></div>
+    <div th:replace="~{fragments :: navbar}"></div>
+
+    <div class="container">
+        <div class="card">
+            <h1>Nuevo análisis para <span th:text="${analisis.estudiante.nombreCompleto}"></span></h1>
+            <form th:action="@{/hematologia/guardar}" th:object="${analisis}" method="post">
+                <input type="hidden" th:field="*{estudiante.id}" />
+                <label>Fecha del análisis:</label>
+                <input type="date" th:field="*{fecha}" required><br>
+                <label>Hemoglobina (g/dL):</label>
+                <input type="number" th:field="*{hemoglobina}" step="0.1"><br>
+                <label>Hematocrito (%):</label>
+                <input type="number" th:field="*{hematocrito}" step="0.1"><br>
+                <label>Ferritina sérica (ng/mL):</label>
+                <input type="number" th:field="*{ferritinaSerica}" step="0.01"><br>
+                <label>Hierro sérico (mcg/dL):</label>
+                <input type="number" th:field="*{hierroSerico}" step="0.1"><br>
+                <label>¿Registrado por personal de salud?</label>
+                <input type="checkbox" th:field="*{registradoPorSalud}"><br>
+                <label>Observaciones médicas:</label>
+                <textarea th:field="*{observaciones}"></textarea><br>
+                <button type="submit">Guardar</button>
+                <a th:href="@{/hematologia/{id}(id=${analisis.estudiante.id})}" class="btn">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

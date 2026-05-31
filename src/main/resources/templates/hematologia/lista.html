@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Historial Hematológico</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+
+<body>
+    <div th:replace="~{fragments :: header}"></div>
+    <div th:replace="~{fragments :: navbar}"></div>
+
+    <div class="container">
+        <div class="card">
+            <h1>Análisis de <span th:text="${estudiante.nombreCompleto}"></span></h1>
+            <a th:href="@{/hematologia/nuevo/{id}(id=${estudiante.id})}">Nuevo análisis</a>
+            <table>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Hemoglobina</th>
+                    <th>Hematocrito</th>
+                    <th>Ferritina</th>
+                    <th>Hierro sérico</th>
+                    <th>Reg. Salud</th>
+                </tr>
+                <tr th:each="a : ${analisis}">
+                    <td th:text="${a.fecha}"></td>
+                    <td th:text="${a.hemoglobina}"></td>
+                    <td th:text="${a.hematocrito}"></td>
+                    <td th:text="${a.ferritinaSerica}"></td>
+                    <td th:text="${a.hierroSerico}"></td>
+                    <td th:text="${a.registradoPorSalud} ? 'Sí' : 'No'"></td>
+                </tr>
+            </table>
+            <a th:href="@{/estudiantes}" class="btn">Volver</a>
+        </div>
+    </div>
+</body>
+
+</html>

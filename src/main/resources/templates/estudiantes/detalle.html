@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle del Estudiante</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <style>
+        .detalle-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-top: 20px;
+        }
+        .perfil-header {
+            width: 100%;
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            color: white;
+            border-radius: 16px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+        .perfil-header .avatar {
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            width: 90px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+        .perfil-header .info-principal h1 {
+            margin: 0 0 8px 0;
+            font-size: 2.2rem;
+        }
+        .perfil-header .info-principal span {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        .tarjeta-seccion {
+            flex: 1 1 280px;
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+        .tarjeta-seccion h3 {
+            font-size: 1.2rem;
+            color: #2e7d32;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e8f5e9;
+            padding-bottom: 8px;
+        }
+        .dato {
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .dato .etiqueta {
+            font-weight: 600;
+            color: #555;
+        }
+        .dato .valor {
+            color: #1e293b;
+            background: #f1f8e9;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+        }
+        .observaciones {
+            width: 100%;
+        }
+        .boton-volver {
+            margin-top: 30px;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .perfil-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .tarjeta-seccion {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="~{fragments :: header}"></div>
+    <div th:replace="~{fragments :: navbar}"></div>
+
+    <div class="container">
+        <!-- Cabecera con nombre y avatar -->
+        <div class="perfil-header">
+            <div class="avatar" th:text="${estudiante.sexo == 'M' ? '👦' : '👧'}"></div>
+            <div class="info-principal">
+                <h1 th:text="${estudiante.nombreCompleto}"></h1>
+                <span th:text="${estudiante.edad} + ' años • Grado: ' + ${estudiante.grado}"></span>
+            </div>
+        </div>
+
+        <div class="detalle-container">
+            <!-- Datos personales -->
+            <div class="tarjeta-seccion">
+                <h3>📌 Datos Personales</h3>
+                <div class="dato"><span class="etiqueta">Nombre completo</span><span class="valor" th:text="${estudiante.nombreCompleto}"></span></div>
+                <div class="dato"><span class="etiqueta">Edad</span><span class="valor" th:text="${estudiante.edad} + ' años'"></span></div>
+                <div class="dato"><span class="etiqueta">Sexo</span><span class="valor" th:text="${estudiante.sexo}"></span></div>
+                <div class="dato"><span class="etiqueta">Grado / Nivel</span><span class="valor" th:text="${estudiante.grado}"></span></div>
+            </div>
+
+            <!-- Socioeconómico -->
+            <div class="tarjeta-seccion">
+                <h3>💰 Información Socioeconómica</h3>
+                <div class="dato"><span class="etiqueta">Nivel socioeconómico</span><span class="valor" th:text="${estudiante.nivelSocioeconomico}"></span></div>
+                <div class="dato"><span class="etiqueta">Situación laboral</span><span class="valor" th:text="${estudiante.situacionLaboral}"></span></div>
+            </div>
+
+            <!-- Alimentación y entorno -->
+            <div class="tarjeta-seccion">
+                <h3>🍽️ Alimentación y Entorno</h3>
+                <div class="dato"><span class="etiqueta">Acceso a alimentos</span><span class="valor" th:text="${estudiante.accesoAlimentos}"></span></div>
+                <div class="dato"><span class="etiqueta">Miembros del hogar</span><span class="valor" th:text="${estudiante.miembrosHogar}"></span></div>
+                <div class="dato"><span class="etiqueta">Ubicación</span><span class="valor" th:text="${estudiante.ubicacion}"></span></div>
+                <div class="dato"><span class="etiqueta">Cultura alimenticia</span><span class="valor" th:text="${estudiante.culturaAlimenticia}"></span></div>
+            </div>
+
+            <!-- Condiciones del hogar -->
+            <div class="tarjeta-seccion">
+                <h3>🏠 Condiciones del Hogar</h3>
+                <div class="dato"><span class="etiqueta">Tipo de cocina</span><span class="valor" th:text="${estudiante.tipoCocina}"></span></div>
+                <div class="dato"><span class="etiqueta">Refrigeradora</span><span class="valor" th:text="${estudiante.tieneRefrigeradora ? '✅ Sí' : '❌ No'}"></span></div>
+                <div class="dato"><span class="etiqueta">Agua potable</span><span class="valor" th:text="${estudiante.tieneAguaPotable ? '✅ Sí' : '❌ No'}"></span></div>
+            </div>
+
+            <!-- Observaciones (ancho completo) -->
+            <div class="tarjeta-seccion observaciones">
+                <h3>📝 Observaciones</h3>
+                <p th:if="${estudiante.observaciones}" th:text="${estudiante.observaciones}" style="background:#f9f9f9; padding:12px; border-radius:8px; font-style:italic;"></p>
+                <p th:unless="${estudiante.observaciones}" style="color:#999;">Sin observaciones registradas</p>
+            </div>
+        </div>
+
+        <div class="boton-volver">
+            <a th:href="@{/estudiantes}" class="btn" style="padding:12px 30px; font-size:1rem;">← Volver a la lista</a>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments :: footer}"></div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Bandeja de Mensajes</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+
+<body>
+    <div th:replace="~{fragments :: header}"></div>
+    <div th:replace="~{fragments :: navbar}"></div>
+
+    <div class="container">
+        <div class="card">
+            <h1>Mensajes</h1>
+            <a th:href="@{/mensajes/enviar}" class="btn">+Nuevo mensaje</a>
+            <table>
+                <tr>
+                    <th>De</th>
+                    <th>Asunto/Contenido</th>
+                    <th>Fecha</th>
+                    <th>Leído</th>
+                    <th>Respondido</th>
+                </tr>
+                <tr th:each="m : ${mensajes}">
+                    <td th:text="${m.remitente.nombre}"></td>
+                    <td th:text="${#strings.abbreviate(m.contenido, 50)}"></td>
+                    <td th:text="${m.fechaEnvio}"></td>
+                    <td th:text="${m.leido} ? 'Sí' : 'No'"></td>
+                    <td th:text="${m.respondido} ? 'Sí' : 'No'"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

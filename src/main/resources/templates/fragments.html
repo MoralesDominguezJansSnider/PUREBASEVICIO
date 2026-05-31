@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- Los estilos se incluyen en cada página, aquí solo fragmentos estructurales -->
+</head>
+<body>
+
+<!-- Header común -->
+<header th:fragment="header" class="header">
+    <div class="logo">
+        <h1>🥗 NutriVida - Prevención de la Anemia</h1>
+    </div>
+    <div class="user-info" th:if="${session.usuario}">
+        <span th:text="'Bienvenido, ' + ${session.usuario.nombre}"></span>
+        <a th:href="@{/logout}" class="btn-logout">Cerrar sesión</a>
+    </div>
+</header>
+
+<!-- Barra de navegación (cambia según el rol, pero aquí una genérica) -->
+<nav th:fragment="navbar" class="navbar">
+    <ul>
+        <li><a th:href="@{/}" class="active">Inicio</a></li>
+        <th:block th:if="${session.usuario}">
+            <th:block th:if="${session.usuario.rol.name() == 'PADRE'}">
+                <li><a th:href="@{/estudiantes}">Estudiantes</a></li>
+                <li><a th:href="@{/mensajes}">Mensajes</a></li>
+                <li><a th:href="@{/alimentos}">Biblioteca</a></li>
+            </th:block>
+            <th:block th:if="${session.usuario.rol.name() == 'DOCENTE' or session.usuario.rol.name() == 'SALUD'}">
+                <li><a th:href="@{/vinculacion}">Vinculación</a></li>
+                <li><a th:href="@{/mensajes}">Mensajes</a></li>
+                <li><a th:href="@{/alimentos}">Biblioteca</a></li>
+            </th:block>
+        </th:block>
+    </ul>
+</nav>
+
+<!-- Footer común -->
+<footer th:fragment="footer" class="footer">
+    <p>&copy; 2026 NutriVida - Plataforma de apoyo nutricional. Todos los derechos reservados.</p>
+</footer>
+
+</body>
+</html>

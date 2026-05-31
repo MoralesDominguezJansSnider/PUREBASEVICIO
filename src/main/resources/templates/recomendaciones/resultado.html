@@ -1,0 +1,18 @@
+<!--<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Recomendaciones de Gemini</title>    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+    <div th:replace="~{fragments :: header}"></div>
+    <div th:replace="~{fragments :: navbar}"></div>
+
+    <div class="container">
+        <div class="card">
+    <h1>Recomendaciones de Gemini AI</h1>
+    <div style="white-space: pre-wrap; background:#f9f9f9; padding:20px;" th:text="${recomendacion}"></div>
+    <a th:href="@{/recomendaciones/{id}(id=${estudiante.id})}" class="btn">Generar otra vez</a>
+    <a th:href="@{/estudiantes/{id}(id=${estudiante.id})}" class="btn">Volver al estudiante</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Estudiantes</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+    <div th:replace="~{fragments :: header}"></div>
+    <div th:replace="~{fragments :: navbar}"></div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Mis Estudiantes</h2>
+            <a th:href="@{/estudiantes/nuevo}" class="btn">+ Registrar nuevo estudiante</a>
+
+            <table>
+                <thead>
+                    <tr><th>Nombre</th><th>Edad</th><th>Acciones</th></tr>
+                </thead>
+                <tbody>
+                    <tr th:each="est : ${estudiantes}">
+                        <td th:text="${est.nombreCompleto}"></td>
+                        <td th:text="${est.edad}"></td>
+                        <td>
+                            <a th:href="@{/estudiantes/{id}(id=${est.id})}" class="btn">Ver</a>
+                            <a th:href="@{/comidas/{id}(id=${est.id})}" class="btn">Comidas</a>
+                            <a th:href="@{/hematologia/{id}(id=${est.id})}" class="btn">Hematología</a>
+                            <a th:href="@{/recomendaciones/{id}(id=${est.id})}" class="btn">Recomendaciones IA</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments :: footer}"></div>
+</body>
+</html>

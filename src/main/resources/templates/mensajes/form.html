@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Enviar Mensaje</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+
+<body>
+    <div th:replace="~{fragments :: header}"></div>
+    <div th:replace="~{fragments :: navbar}"></div>
+    <div class="container">
+        <div class="card">
+            <h1>Enviar Mensaje</h1>
+            <form th:action="@{/mensajes/enviar}" th:object="${mensaje}" method="post">
+                <label>Destinatario:</label>
+                <select th:field="*{destinatario.id}" required>
+                    <option value="">Seleccione contacto</option>
+                    <option th:each="v : ${contactos}" th:value="${v.usuarioVinculado.id}"
+                        th:text="${v.usuarioVinculado.nombre} + ' (' + ${v.usuarioVinculado.rol} + ')'"></option>
+                </select><br>
+                <label>Contenido:</label>
+                <textarea th:field="*{contenido}" required></textarea><br>
+                <button type="submit" class="btn">Enviar</button>
+                <a th:href="@{/mensajes}" class="btn">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

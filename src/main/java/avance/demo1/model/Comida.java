@@ -1,31 +1,40 @@
 package avance.demo1.model;
 
-
 import jakarta.persistence.*;
+import lombok.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
+@Table(name = "comida")
+@Data @NoArgsConstructor @AllArgsConstructor
 public class Comida {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String descripcion;
-    
-    @ManyToOne
-    @JoinColumn(name = "estudiante_id")
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "estudiante_id", nullable = false)
     private Estudiante estudiante;
-    
-    public Comida() {}
-    
-    public Comida(String descripcion, Estudiante estudiante) {
-        this.descripcion = descripcion;
-        this.estudiante = estudiante;
+
+    @Column(nullable = false)
+    private LocalDate fecha;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoComida tipo;
+
+    @Column(nullable = false, length = 150)
+    private String alimento;
+
+    @Column(precision = 5, scale = 2)
+    private BigDecimal porciones;
+
+    @OneToOne(mappedBy = "comida", cascade = CascadeType.ALL, orphanRemoval = true)
+    private AnalisisNutricional analisisNutricional;
+
+    public enum TipoComida {
+        DESAYUNO, ALMUERZO, CENA
     }
-    
-    // Getters y Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
-    public Estudiante getEstudiante() { return estudiante; }
-    public void setEstudiante(Estudiante estudiante) { this.estudiante = estudiante; }
 }
