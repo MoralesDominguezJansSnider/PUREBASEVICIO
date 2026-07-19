@@ -2,33 +2,129 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+    <meta charset="UTF-8">
     <title>Registrar Comida</title>
     <link rel="stylesheet" th:href="@{/css/estilos.css}">
 </head>
+
 <body>
+
     <div th:replace="~{fragments :: header}"></div>
     <div th:replace="~{fragments :: navbar}"></div>
 
+
     <div class="container">
+
         <div class="card">
-            <h1>Registrar comida para <span th:text="${comida.estudiante.nombreCompleto}"></span></h1>
-            <form th:action="@{/comidas/guardar}" th:object="${comida}" method="post">
-                <input type="hidden" th:field="*{estudiante.id}" />
+
+            <h2>
+                Registrar comida para 
+                <span th:text="${comida.estudiante.nombreCompleto}"></span>
+            </h2>
+
+
+            <form th:action="@{/comidas/guardar}" 
+                  th:object="${comida}" 
+                  method="post">
+
+
+                <!-- ID DEL ESTUDIANTE -->
+                <input type="hidden" th:field="*{estudiante.id}">
+
+
+                <!-- FECHA -->
                 <label>Fecha:</label>
-                <input type="date" th:field="*{fecha}" required><br>
+
+                <input type="date"
+                       th:field="*{fecha}"
+                       required>
+
+
+                <br>
+
+
+                <!-- TIPO DE COMIDA -->
                 <label>Tipo de comida:</label>
+
                 <select th:field="*{tipo}" required>
-                    <option th:each="t : ${tipos}" th:value="${t}" th:text="${t}"></option>
-                </select><br>
+
+                    <option value="">
+                        Seleccione tipo de comida
+                    </option>
+
+                    <option th:each="t : ${tipos}"
+                            th:value="${t}"
+                            th:text="${t}">
+                    </option>
+
+                </select>
+
+
+                <br>
+
+
+                <!-- ALIMENTO CON BUSQUEDA -->
                 <label>Alimento consumido:</label>
-                <input type="text" th:field="*{alimento}" placeholder="Ej: Lentejas, Pollo, etc." required><br>
-                <label>Porciones (en gramos o unidades):</label>
-                <input type="number" th:field="*{porciones}" step="0.1" min="0.1"><br>
-                <button type="submit" class="btn">Guardar</button>
-                <a th:href="@{/comidas/{id}(id=${comida.estudiante.id})}" class="btn">Cancelar</a>
+
+                <input list="listaAlimentos"
+                       th:field="*{alimento}"
+                       class="input-alimento"
+                       placeholder="🔎 Buscar alimento..."
+                       required>
+
+
+                <datalist id="listaAlimentos">
+
+                    <option th:each="al : ${alimentosBiblioteca}"
+                            th:value="${al.nombre}">
+                    </option>
+
+                </datalist>
+
+
+                <br>
+
+
+                <!-- PORCIONES -->
+                <label>
+                    Porciones (en gramos o unidades):
+                </label>
+
+                <input type="number"
+                       th:field="*{porciones}"
+                       step="0.1"
+                       min="0.1"
+                       value="1"
+                       required>
+
+
+                <br>
+
+
+                <!-- BOTONES -->
+
+                <button type="submit" class="btn">
+                    Guardar
+                </button>
+
+
+                <a th:href="@{/comidas/{id}(id=${comida.estudiante.id})}"
+                   class="btn btn-secondary">
+                    Cancelar
+                </a>
+
+
             </form>
+
+
         </div>
+
     </div>
+
+
+    <div th:replace="~{fragments :: footer}"></div>
+
+
 </body>
 
 </html>

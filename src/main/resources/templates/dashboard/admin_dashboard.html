@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Administrador · NutriVida</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+    <style>
+    /* ===== TARJETAS DE RESUMEN ===== */
+    .stats {
+        display: grid !important;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 18px;
+        padding: 18px 10px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        transition: 0.3s;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+    }
+
+    .stat-card .icono {
+        font-size: 30px;
+        margin-bottom: 8px;
+    }
+
+    .stat-card h3 {
+        margin: 5px 0;
+        font-size: 30px;
+        color: #1a4a2a;
+        font-weight: 700;
+    }
+
+    .stat-card span {
+        color: #555;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    @media(max-width:900px){
+        .stats {
+            grid-template-columns: repeat(3,1fr);
+        }
+    }
+
+    @media(max-width:600px){
+        .stats {
+            grid-template-columns: repeat(2,1fr);
+        }
+    }
+</style>
+</head>
+<body>
+<div th:replace="~{fragments :: header}"></div>
+<div th:replace="~{fragments :: navbar}"></div>
+
+<div class="container" style="max-width:1400px;">
+    <h2 style="margin:20px 0;">📊 Panel de Administración</h2>
+
+    <!-- Filtros -->
+    <div class="card" style="margin-bottom:25px;">
+        <form id="filtroForm" style="display:flex; gap:15px; align-items:end;">
+            <div>
+                <label>Año</label>
+                <input type="number" name="year" id="filtroYear" value="2026" min="2026" max="2030" style="width:80px;">
+            </div>
+            <div>
+                <label>Mes</label>
+                <select name="month" id="filtroMonth">
+                    <option value="">Todos</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Septiembre</option>
+                </select>
+            </div>
+            <div>
+                <label>Día</label>
+                <input type="number" name="day" id="filtroDay" min="1" max="31" style="width:60px;">
+            </div>
+            <button type="button" id="aplicarFiltro" class="btn">Aplicar</button>
+        </form>
+    </div>
+
+    <!-- Tarjetas de resumen -->
+<div class="stats" id="tarjetasResumen">
+
+    <div class="stat-card">
+        <div class="icono">👦</div>
+        <h3 id="totalEstudiantes">0</h3>
+        <span>Estudiantes</span>
+    </div>
+
+    <div class="stat-card">
+        <div class="icono">🍽️</div>
+        <h3 id="totalComidas">0</h3>
+        <span>Comidas registradas</span>
+    </div>
+
+    <div class="stat-card">
+        <div class="icono">🩸</div>
+        <h3 id="promedioHb">0.0</h3>
+        <span>Promedio Hb (g/dL)</span>
+    </div>
+
+    <div class="stat-card">
+        <div class="icono">⚠️</div>
+        <h3 id="estudiantesAnemia">0</h3>
+        <span>Est. con anemia</span>
+    </div>
+
+    <div class="stat-card">
+        <div class="icono">🥗</div>
+        <h3 id="alimentosDistintos">0</h3>
+        <span>Alimentos distintos</span>
+    </div>
+
+</div>
+
+    <!-- Fila 1: Descriptivos -->
+    <div style="display:flex; gap:20px; flex-wrap:wrap;">
+        <div class="card" style="flex:1; min-width:300px;">
+            <h3>🥗 Alimentos más consumidos</h3>
+            <canvas id="chartBarrasAlimentos" height="200"></canvas>
+        </div>
+        <div class="card" style="flex:1; min-width:300px;">
+            <h3>🩸 Promedio de Hemoglobina (mensual)</h3>
+            <canvas id="chartLineaHb" height="200"></canvas>
+        </div>
+        <div class="card" style="flex:1; min-width:300px;">
+            <h3>🍽️ Distribución por categorías</h3>
+            <canvas id="chartPieCategorias" height="200"></canvas>
+        </div>
+    </div>
+
+    <!-- Fila 2: Predictivos -->
+    <div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:20px;">
+        <div class="card" style="flex:1; min-width:300px;">
+            <h3>🔮 Predicción alimentos (Oct-Dic)</h3>
+            <canvas id="chartPredBarras" height="200"></canvas>
+        </div>
+        <div class="card" style="flex:1; min-width:300px;">
+            <h3>📈 Predicción Hemoglobina</h3>
+            <canvas id="chartPredLinea" height="200"></canvas>
+        </div>
+        <div class="card" style="flex:1; min-width:300px;">
+            <h3>📊 Predicción categorías (Dic)</h3>
+            <canvas id="chartPredPie" height="200"></canvas>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments :: footer}"></div>
+
+<script th:inline="javascript">
+
+let chartBarras, chartLinea, chartPie, chartPredBarras, chartPredLinea, chartPredPie;
+
+
+function cargarDashboard() {
+
+    let year = $('#filtroYear').val() || null;
+    let month = $('#filtroMonth').val() || null;
+    let day = $('#filtroDay').val() || null;
+
+
+    $.getJSON('/admin/dashboard/data', { year, month, day }, function(data) {
+
+
+        // Actualizar tarjetas
+        $('#totalEstudiantes').text(data.totalEstudiantes);
+        $('#totalComidas').text(data.totalComidas);
+        $('#promedioHb').text(data.promedioHb);
+        $('#estudiantesAnemia').text(data.estudiantesAnemia);
+        $('#alimentosDistintos').text(data.alimentosDistintos);
+        $('#recomendacionesIA').text(data.recomendacionesIA);
+
+
+
+        // eliminar gráficos anteriores
+        if(chartBarras) chartBarras.destroy();
+        if(chartLinea) chartLinea.destroy();
+        if(chartPie) chartPie.destroy();
+        if(chartPredBarras) chartPredBarras.destroy();
+        if(chartPredLinea) chartPredLinea.destroy();
+        if(chartPredPie) chartPredPie.destroy();
+
+
+
+        // ===============================
+        // 1. BARRAS ALIMENTOS
+        // ===============================
+
+        let ctx1 = document
+            .getElementById('chartBarrasAlimentos')
+            .getContext('2d');
+
+
+        chartBarras = new Chart(ctx1,{
+            type:'bar',
+
+            data:{
+                labels:data.labelsAlimentos,
+
+                datasets:[{
+                    label:'Veces consumido',
+                    data:data.dataAlimentos,
+                    backgroundColor:'rgba(75,192,192,0.6)'
+                }]
+            },
+
+
+            options:{
+
+                plugins:{
+                    title:{
+                        display:true,
+                        text:'Alimentos más consumidos'
+                    }
+                },
+
+
+                scales:{
+
+                    x:{
+                        title:{
+                            display:true,
+                            text:'Alimentos'
+                        }
+                    },
+
+
+                    y:{
+                        title:{
+                            display:true,
+                            text:'Cantidad consumida'
+                        },
+                        beginAtZero:true
+                    }
+                }
+            }
+        });
+
+
+
+
+        // ===============================
+        // 2. LINEA HEMOGLOBINA
+        // ===============================
+
+        let ctx2 = document
+        .getElementById('chartLineaHb')
+        .getContext('2d');
+
+
+        chartLinea = new Chart(ctx2,{
+
+            type:'line',
+
+
+            data:{
+
+                labels:data.labelsMeses,
+
+                datasets:[{
+
+                    label:'Hb promedio (g/dL)',
+                    data:data.dataHb,
+                    borderColor:'red',
+                    backgroundColor:'rgba(255,99,132,0.2)',
+                    fill:false
+
+                }]
+            },
+
+
+            options:{
+
+                plugins:{
+                    title:{
+                        display:true,
+                        text:'Evolución mensual de Hemoglobina'
+                    }
+                },
+
+
+                scales:{
+
+                    x:{
+                        title:{
+                            display:true,
+                            text:'Mes'
+                        }
+                    },
+
+
+                    y:{
+                        title:{
+                            display:true,
+                            text:'Hemoglobina (g/dL)'
+                        }
+                    }
+                }
+            }
+        });
+
+
+
+
+        // ===============================
+        // 3. PIE CATEGORIAS
+        // ===============================
+
+
+        let ctx3 = document
+        .getElementById('chartPieCategorias')
+        .getContext('2d');
+
+
+        chartPie = new Chart(ctx3,{
+
+            type:'pie',
+
+
+            data:{
+
+                labels:data.labelsCategorias,
+
+                datasets:[{
+
+                    data:data.dataCategorias,
+
+                    backgroundColor:[
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#4BC0C0',
+                        '#9966FF',
+                        '#FF9F40',
+                        '#C9CBCF'
+                    ]
+                }]
+            },
+
+
+            plugins:[ChartDataLabels],
+
+
+            options:{
+
+
+                plugins:{
+
+
+                    datalabels:{
+
+
+                        color:'#fff',
+
+                        font:{
+                            weight:'bold'
+                        },
+
+
+                        formatter:function(value,context){
+
+                            let total=context.chart.data.datasets[0].data
+                            .reduce((a,b)=>a+b,0);
+
+
+                            return ((value/total)*100)
+                            .toFixed(1)+'%';
+
+                        }
+                    },
+
+
+                    title:{
+                        display:true,
+                        text:'Distribución por categorías'
+                    }
+                }
+            }
+
+        });
+
+
+
+
+
+        // ===============================
+        // 4. PREDICCION BARRAS
+        // ===============================
+
+
+        let ctx4 = document
+        .getElementById('chartPredBarras')
+        .getContext('2d');
+
+
+        let datasetsPred = data.datasetsPredAlimentos.map(ds=>({
+
+            label:ds.label,
+            data:ds.data,
+            backgroundColor:'rgba(153,102,255,0.6)'
+
+        }));
+
+
+
+        chartPredBarras = new Chart(ctx4,{
+
+            type:'bar',
+
+            data:{
+                labels:data.labelsPredAlimentos,
+                datasets:datasetsPred
+            },
+
+
+            options:{
+
+                scales:{
+
+                    x:{
+                        title:{
+                            display:true,
+                            text:'Mes'
+                        }
+                    },
+
+                    y:{
+                        title:{
+                            display:true,
+                            text:'Cantidad predicha'
+                        }
+                    }
+                }
+            }
+        });
+
+
+
+
+
+
+        // ===============================
+        // 5. PREDICCION LINEA HB
+        // ===============================
+
+
+        let ctx5 = document
+        .getElementById('chartPredLinea')
+        .getContext('2d');
+
+
+
+        chartPredLinea = new Chart(ctx5,{
+
+            type:'line',
+
+            data:{
+
+
+                labels:[
+                    'Octubre',
+                    'Noviembre',
+                    'Diciembre'
+                ],
+
+
+                datasets:[{
+
+                    label:'Hb predicha (g/dL)',
+                    data:data.predHb,
+                    borderColor:'green',
+                    fill:false
+
+                }]
+            },
+
+
+            options:{
+
+
+                scales:{
+
+
+                    x:{
+                        title:{
+                            display:true,
+                            text:'Mes'
+                        }
+                    },
+
+
+                    y:{
+                        title:{
+                            display:true,
+                            text:'Hemoglobina predicha'
+                        }
+                    }
+
+                }
+            }
+
+        });
+
+
+
+
+
+
+        // ===============================
+        // 6. PREDICCION PIE
+        // ===============================
+
+
+        let ctx6 = document
+        .getElementById('chartPredPie')
+        .getContext('2d');
+
+
+
+        chartPredPie = new Chart(ctx6,{
+
+            type:'pie',
+
+
+            data:{
+
+
+                labels:data.labelsPredCategorias,
+
+
+                datasets:[{
+
+                    data:data.dataPredCategorias,
+
+
+                    backgroundColor:[
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#4BC0C0',
+                        '#9966FF',
+                        '#FF9F40',
+                        '#C9CBCF'
+                    ]
+
+                }]
+            },
+
+
+            plugins:[ChartDataLabels],
+
+
+            options:{
+
+
+                plugins:{
+
+
+                    datalabels:{
+
+
+                        color:'#fff',
+
+                        font:{
+                            weight:'bold'
+                        },
+
+
+                        formatter:function(value,context){
+
+                            let total=context.chart.data.datasets[0].data
+                            .reduce((a,b)=>a+b,0);
+
+
+                            return ((value/total)*100)
+                            .toFixed(1)+'%';
+
+                        }
+                    }
+
+                }
+
+            }
+
+        });
+
+
+    });
+
+}
+
+
+
+$('#aplicarFiltro').click(cargarDashboard);
+
+
+$(document).ready(function(){
+
+    cargarDashboard();
+
+});
+
+
+</script>
+</body>
+</html>

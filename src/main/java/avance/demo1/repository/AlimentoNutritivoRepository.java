@@ -8,4 +8,5 @@ import java.util.List;
 public interface AlimentoNutritivoRepository extends JpaRepository<AlimentoNutritivo, Long> {
     List<AlimentoNutritivo> findByCategoria(Categoria categoria);
     List<AlimentoNutritivo> findByNombreContainingIgnoreCase(String nombre);
+    
 }

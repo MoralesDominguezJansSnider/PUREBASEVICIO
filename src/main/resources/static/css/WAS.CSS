@@ -1,0 +1,200 @@
+/* =====================================
+   CHAT ESTILO WHATSAPP
+   ===================================== */
+/* CONTENEDOR PRINCIPAL */
+.chat-container {
+    display: flex;
+    width: 90%;
+    height: 75vh;
+    margin: 30px auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+/* =====================================
+   PANEL CONTACTOS
+   ===================================== */
+.contactos-panel {
+    width: 30%;
+    background: #ffffff;
+    border-right: 1px solid #ddd;
+    overflow-y: auto;
+}
+.chat-header {
+    background: #075e54;
+    color: white;
+    padding: 15px;
+}
+.chat-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+/* CONTACTOS */
+.contacto {
+    border-bottom: 1px solid #eeeeee;
+}
+.contacto-link {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    text-decoration: none;
+    color: #333;
+    transition: 0.3s;
+}
+.contacto-link:hover {
+    background: #f1f1f1;
+}
+/* AVATAR */
+.avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #25d366;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 12px;
+}
+.contacto-info {
+    display: flex;
+    flex-direction: column;
+}
+.contacto-info strong {
+    font-size: 15px;
+}
+.contacto-info small {
+    color: gray;
+}
+/* =====================================
+   PANEL CONVERSACION
+   ===================================== */
+.conversacion {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+}
+.mensajes-box {
+    flex: 1;
+    padding: 20px;
+    background: #efe7de;
+    overflow-y: auto;
+}
+/* =====================================
+   BURBUJAS DE MENSAJES
+   ===================================== */
+.mensaje {
+    max-width: 65%;
+    padding: 10px 15px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    word-wrap: break-word;
+}
+.mensaje p {
+    margin: 0;
+    color: #333;
+}
+.mensaje span {
+    display: block;
+    text-align: right;
+    font-size: 11px;
+    color: #777;
+    margin-top: 5px;
+}
+/* MENSAJE ENVIADO */
+.enviado {
+    background: #dcf8c6;
+    margin-left: auto;
+}
+/* MENSAJE RECIBIDO */
+.recibido {
+    background: white;
+    margin-right: auto;
+}
+/* =====================================
+   CAJA ENVIAR MENSAJE
+   ===================================== */
+.zona-envio {
+    padding: 15px;
+    background: #f5f5f5;
+}
+.zona-envio form {
+    max-width: none;
+    display: flex;
+    gap: 10px;
+}
+.zona-envio textarea {
+    flex: 1;
+    height: 45px;
+    resize: none;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    padding: 12px;
+    font-size: 14px;
+}
+.zona-envio button {
+    height: 45px;
+}
+/* =====================================
+   PANTALLA INICIAL
+   ===================================== */
+.chat-vacio {
+    width: 70%;
+    background: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.bienvenida-chat {
+    text-align: center;
+    color: #555;
+    padding: 40px;
+}
+.icono-chat {
+    width: 90px;
+    height: 90px;
+    background: #25d366;
+    border-radius: 50%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 45px;
+    margin-bottom: 20px;
+}
+.bienvenida-chat h2 {
+    color: #075e54;
+    margin-bottom: 15px;
+}
+.bienvenida-chat p {
+    font-size: 17px;
+}
+.bienvenida-chat small {
+    color: #888;
+}
+/* MENSAJES VACIOS */
+.sin-mensajes,
+.sin-contactos {
+    text-align: center;
+    padding: 30px;
+    color: gray;
+}
+/* =====================================
+   RESPONSIVE
+   ===================================== */
+@media(max-width:768px){
+    .chat-container {
+        width: 100%;
+        height: 85vh;
+    }
+    .contactos-panel {
+        width: 35%;
+    }
+    .conversacion,
+    .chat-vacio {
+        width: 65%;
+    }
+}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gráficos Nutricionales - <span th:text="${estudiante.nombreCompleto}"></span></title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div th:replace="~{fragments :: header}"></div>
+    <div th:replace="~{fragments :: navbar}"></div>
+    <div class="container">
+        <div class="card">
+            <h2>📊 Gráficos Nutricionales de <span th:text="${estudiante.nombreCompleto}"></span></h2>
+            <h3>Evolución de Hemoglobina y Hematocrito</h3>
+            <canvas id="chartHematologico" width="400" height="200"></canvas>
+            <hr>
+            <h3>Promedio de Nutrientes en Comidas</h3>
+            <canvas id="chartNutrientes" width="400" height="200"></canvas>
+             <a th:href="@{/estudiantes}" class="btn">Volver al estudiante</a>
+        </div>
+    </div>
+    <div th:replace="~{fragments :: footer}"></div>
+    <script th:inline="javascript">
+        var fechas = /*[[${fechas}]]*/ [];
+        var hemoglobinas = /*[[${hemoglobinas}]]*/ [];
+        var hematocritos = /*[[${hematocritos}]]*/ [];
+        var promedios = /*[[${promedios}]]*/ [];
+        // Gráfico de líneas: evolución hematológica
+        var ctx1 = document.getElementById('chartHematologico').getContext('2d');
+        if (fechas.length > 0) {
+            new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: fechas,
+                    datasets: [
+                        {
+                            label: 'Hemoglobina (g/dL)',
+                            data: hemoglobinas,
+                            borderColor: 'rgba(220, 53, 69, 1)',
+                            backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Hematocrito (%)',
+                            data: hematocritos,
+                            borderColor: 'rgba(40, 167, 69, 1)',
+                            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    },
+                    scales: {
+                        y: { beginAtZero: false }
+                    }
+                }
+            });
+        } else {
+            ctx1.font = "16px Arial";
+            ctx1.fillText("No hay datos hematológicos registrados", 10, 50);
+        }
+        // Gráfico de barras: promedios de nutrientes
+        var ctx2 = document.getElementById('chartNutrientes').getContext('2d');
+        if (promedios.length === 5) {
+            new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['Hierro', 'Vitamina C', 'Proteínas', 'Calcio', 'Vitamina A'],
+                    datasets: [{
+                        label: '% VDR promedio',
+                        data: promedios,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(255, 159, 64, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(153, 102, 255, 0.6)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        } else {
+            ctx2.font = "16px Arial";
+            ctx2.fillText("No hay datos de análisis nutricional", 10, 50);
+        }
+    </script>
+</body>
+</html>

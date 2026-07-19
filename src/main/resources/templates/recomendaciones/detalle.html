@@ -2,208 +2,522 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Recomendaciones IA</title>
+    <title>Nutrición Inteligente · Recomendaciones IA</title>
     <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        .split-screen {
-            display: flex;
-            min-height: 70vh;
-            margin: 20px 0;
-        }
-        .left {
-            width: 70%;
-            padding: 25px;
-            background: #f4f9f4;
-            border-radius: 12px;
-            margin-right: 20px;
-        }
-        .right {
-            width: 30%;
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .info-estudiante h2 {
-            color: #2e7d32;
-        }
-        .datos {
-            line-height: 2;
-            margin-bottom: 20px;
-        }
-        .comidas {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        .btn-recomendar {
-            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+        body { font-family: 'Inter', sans-serif; }
+        .split-screen { display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 1.5rem; }
+        .left-panel { flex: 2; min-width: 280px; background: white; border-radius: 32px; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.08); overflow: hidden; }
+        .card-header { background: #fafef5; padding: 1.2rem 2rem; border-bottom: 2px solid #e2f0da; }
+        .card-header h2 { color: #1f542e; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .profile-body { padding: 1.6rem 2rem 2rem 2rem; }
+        .info-grid { background: #f9fef7; border-radius: 24px; padding: 1rem 1.3rem; margin-bottom: 1.5rem; border: 1px solid #e3f1dc; }
+        .datos-chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0 12px 0; }
+        .chip { background: white; border-radius: 40px; padding: 0.3rem 1rem; font-size: 0.8rem; font-weight: 500; color: #2d5a3a; border: 1px solid #cde2c3; }
+        .comidas-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+        .comida-tag { background: #ecf6e5; border-radius: 50px; padding: 0.4rem 1rem; font-size: 0.8rem; }
+        .iron-section { background: #ffffff; border-radius: 24px; padding: 1rem 1.2rem; margin: 1.2rem 0; border: 1px solid #e0efd6; }
+        .metric { margin-bottom: 1rem; }
+        .metric-header { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; }
+        .progress-bg { background: #e4ecdff2; border-radius: 30px; height: 10px; overflow: hidden; }
+        .progress-fill { background: #e67e22; height: 10px; border-radius: 30px; width: 0%; }
+        .critical-fill { background: #c0392b; }
+        .btn-ia { background: linear-gradient(105deg, #2a6e3a, #1b4f27); width: 100%; border: none; color: white; font-weight: 700; padding: 1rem; border-radius: 60px; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 12px; cursor: pointer; transition: 0.2s; margin: 1rem 0 1rem 0; }
+        .btn-ia:hover { transform: translateY(-2px); background: linear-gradient(105deg, #1f5e30, #13421f); }
+        .action-row { display: flex; gap: 12px; margin-bottom: 1rem; }
+        .action-secondary { flex: 1; background: #f0f6ec; border: 1px solid #cde0c2; padding: 0.7rem; border-radius: 60px; font-weight: 600; font-size: 0.8rem; cursor: pointer; text-align: center; transition: 0.2s; color: #2b5938; }
+        .action-secondary:hover { background: #e2f0da; transform: translateY(-2px); }
+        .recom-box { background: #fffae9; border-left: 5px solid #f5a623; border-radius: 20px; padding: 1.2rem 1.4rem; margin-top: 1rem; font-size: 0.9rem; line-height: 1.5; }
+        .loading-ia { background: #fef2db; border-radius: 28px; padding: 1rem; text-align: center; display: none; margin-top: 1rem; }
+        .right-panel { flex: 1; min-width: 260px; background: white; border-radius: 32px; padding: 1.6rem 1.2rem; box-shadow: 0 20px 30px -12px rgba(0,0,0,0.05); border: 1px solid #e6f0e0; align-self: start; position: sticky; top: 100px; }
+        .right-title { font-size: 1.3rem; font-weight: 700; color: #2a633b; border-bottom: 2px solid #d9efcf; padding-bottom: 0.7rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 8px; }
+        .estudiante-card { background: #f8fafc; border-radius: 18px; padding: 1rem; margin-bottom: 1rem; border: 2px solid transparent; transition: 0.2s; display: block; text-decoration: none; color: inherit; }
+        .estudiante-card:hover { background: #e8f5e9; border-color: #8bc34a; transform: translateX(4px); }
+        .estudiante-card.active { border-color: #2e7d32; background: #dcedc8; }
+        .estudiante-card .nombre { font-weight: 800; font-size: 1rem; color: #1b5e20; display: flex; align-items: center; gap: 8px; }
+        .estudiante-card .detalle { font-size: 0.75rem; color: #4a5b44; margin-top: 6px; }
+        .toast-msg { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1f3822e6; backdrop-filter: blur(10px); color: #fef7cf; padding: 10px 24px; border-radius: 60px; font-weight: 500; font-size: 0.8rem; z-index: 1200; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+
+        /* Botón de voz flotante */
+        .voice-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #2e7d32;
             color: white;
             border: none;
-            padding: 14px 28px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: bold;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
             cursor: pointer;
+            z-index: 1300;
             transition: 0.3s;
-            margin-top: 10px;
         }
-        .btn-recomendar:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(46,125,50,0.4);
+        .voice-btn.listening {
+            background: #c62828;
+            animation: pulse 1.5s infinite;
         }
-        .recomendacion {
-            margin-top: 25px;
-            background: #fffbea;
-            border-left: 5px solid #f59e0b;
-            padding: 20px;
-            border-radius: 12px;
-            white-space: pre-wrap;
-            display: none;  /* oculto hasta que haya resultado */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(198,40,40,0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(198,40,40,0); }
+            100% { box-shadow: 0 0 0 0 rgba(198,40,40,0); }
         }
-        .loading {
-            color: #2e7d32;
-            font-style: italic;
-            margin-top: 15px;
+        .voice-status {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            background: #333;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            z-index: 1300;
+            display: none;
         }
-        .estudiante-card {
-            background: #f8fafc;
-            border-radius: 14px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 2px solid transparent;
-            transition: 0.3s;
-            display: block;
-            text-decoration: none;
-            color: inherit;
-        }
-        .estudiante-card:hover {
-            background: #e8f5e9;
-            border-color: #4caf50;
-            transform: translateY(-2px);
-        }
-        .estudiante-card.active {
-            border-color: #2e7d32;
-            background: #dcedc8;
-        }
-        .estudiante-card .nombre {
-            font-weight: bold;
-            font-size: 17px;
-            color: #1b5e20;
-        }
-        .estudiante-card .detalle {
-            color: #64748b;
-            line-height: 1.6;
-            font-size: 14px;
+        @media (max-width: 900px) {
+            .split-screen { flex-direction: column; }
+            .right-panel { position: static; }
+            .voice-btn { bottom: 20px; right: 20px; }
         }
     </style>
 </head>
 <body>
-
-    <!-- Fragmentos de cabecera y navegación -->
     <div th:replace="~{fragments :: header}"></div>
     <div th:replace="~{fragments :: navbar}"></div>
 
     <div class="container">
         <div class="split-screen">
-
             <!-- ========== PANEL IZQUIERDO ========== -->
-            <div class="left">
-                <h1>🤖 Nutrición Inteligente</h1>
-                <p style="color:#64748b; margin-bottom:25px;">
-                    Genera recomendaciones personalizadas con Gemini AI.
-                </p>
-
-                <!-- Información del estudiante actual -->
-                <div class="info-estudiante" id="infoEstudiante">
-                    <h2 th:text="'👦 ' + ${estudiante.nombreCompleto}"></h2>
-                    <div class="datos">
-                        <strong>📅 Edad:</strong> <span th:text="${estudiante.edad}"></span> años<br>
-                        <strong>⚥ Sexo:</strong> <span th:text="${estudiante.sexo}"></span><br>
-                        <strong>💰 Nivel socioeconómico:</strong> <span th:text="${estudiante.nivelSocioeconomico}"></span><br>
-                        <strong>📍 Ubicación:</strong> <span th:text="${estudiante.ubicacion}"></span><br>
-                        <strong>🍲 Cultura alimenticia:</strong> <span th:text="${estudiante.culturaAlimenticia}"></span>
+            <div class="left-panel" id="leftPanel"
+                 th:attr="data-estudiante-id=${estudiante.id},
+                          data-estudiante-nombre=${estudiante.nombreCompleto},
+                          data-estudiante-cultura=${estudiante.culturaAlimenticia},
+                          data-estudiante-sexo=${estudiante.sexo},
+                          data-hemoglobina=${ultimoAnalisis != null ? ultimoAnalisis.hemoglobina : 0},
+                          data-hematocrito=${ultimoAnalisis != null ? ultimoAnalisis.hematocrito : 0},
+                          data-ferritina=${ultimoAnalisis != null ? ultimoAnalisis.ferritinaSerica : 0},
+                          data-hierro=${ultimoAnalisis != null ? ultimoAnalisis.hierroSerico : 0}">
+                <div class="card-header">
+                    <h2><i class="fas fa-user-graduate"></i> <span th:text="${estudiante.nombreCompleto}">Nombre</span></h2>
+                </div>
+                <div class="profile-body">
+                    <!-- Datos básicos en chips -->
+                    <div class="info-grid">
+                        <div class="datos-chips">
+                            <span class="chip"><i class="fas fa-calendar-alt"></i> <span th:text="${estudiante.edad}"></span> años</span>
+                            <span class="chip"><i class="fas" th:classappend="${estudiante.sexo == 'M' ? 'fa-mars' : 'fa-venus'}"></i> <span th:text="${estudiante.sexo}"></span></span>
+                            <span class="chip"><i class="fas fa-chart-line"></i> Nivel: <span th:text="${estudiante.nivelSocioeconomico}"></span></span>
+                            <span class="chip"><i class="fas fa-map-marker-alt"></i> <span th:text="${estudiante.ubicacion}"></span></span>
+                            <span class="chip"><i class="fas" th:classappend="${#strings.contains(estudiante.culturaAlimenticia, 'Selva') ? 'fa-tree' : (#strings.contains(estudiante.culturaAlimenticia, 'Andina') ? 'fa-mountain' : 'fa-water')}"></i> <span th:text="${estudiante.culturaAlimenticia}"></span></span>
+                        </div>
+                        <div style="margin-top: 8px;">
+                            <strong><i class="fas fa-utensils"></i> Comidas recientes</strong>
+                            <div class="comidas-list">
+                                <th:block th:if="${not #lists.isEmpty(estudiante.comidas)}">
+                                    <span class="comida-tag" th:each="c : ${estudiante.comidas}">
+                                        <i class="fas fa-utensils"></i> <span th:text="${c.alimento + ' (' + c.tipo + ')'}"></span>
+                                    </span>
+                                </th:block>
+                                <th:block th:unless="${not #lists.isEmpty(estudiante.comidas)}">
+                                    <span class="comida-tag">Sin comidas registradas</span>
+                                </th:block>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Últimas comidas -->
-                    <div class="comidas">
-                        <strong>🍽️ Comidas recientes:</strong>
-                        <ul>
-                            <th:block th:if="${not #lists.isEmpty(estudiante.comidas)}">
-                                <li th:each="c : ${estudiante.comidas}" th:text="${c.alimento} + ' (' + ${c.tipo} + ')'"></li>
-                            </th:block>
-                            <li th:unless="${not #lists.isEmpty(estudiante.comidas)}">Sin comidas registradas</li>
-                        </ul>
+                    <!-- Datos hematológicos (si existen) -->
+                    <th:block th:if="${ultimoAnalisis != null}">
+                        <div class="iron-section">
+                            <div style="font-weight: 800; margin-bottom: 12px;">
+                                <i class="fas fa-charging-station"></i> 
+                                Estado hematológico · 
+                                <span th:if="${ultimoAnalisis.hemoglobina < 9}">Riesgo crítico</span>
+                                <span th:if="${ultimoAnalisis.hemoglobina >= 9 and ultimoAnalisis.hemoglobina < 11}">Deficiencia</span>
+                                <span th:if="${ultimoAnalisis.hemoglobina >= 11}">Vigilancia</span>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-header">
+                                    <span><strong>Hemoglobina (Hb)</strong></span>
+                                    <span><strong th:text="${ultimoAnalisis.hemoglobina}"></strong> g/dL (meta &gt;11)</span>
+                                </div>
+                                <div class="progress-bg">
+                                    <div class="progress-fill" 
+                                         th:classappend="${ultimoAnalisis.hemoglobina < 9 ? 'critical-fill' : ''}"
+                                         th:style="'width: ' + ${(ultimoAnalisis.hemoglobina / 11.5) * 100} + '%'"></div>
+                                </div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-header">
+                                    <span><strong>Hematocrito (Hto)</strong></span>
+                                    <span><strong th:text="${ultimoAnalisis.hematocrito}"></strong> % (meta &gt;33%)</span>
+                                </div>
+                                <div class="progress-bg">
+                                    <div class="progress-fill" 
+                                         th:classappend="${ultimoAnalisis.hematocrito < 30 ? 'critical-fill' : ''}"
+                                         th:style="'width: ' + ${(ultimoAnalisis.hematocrito / 35) * 100} + '%'"></div>
+                                </div>
+                            </div>
+                            <div class="metric-header" style="margin-top: 6px;">
+                                <span><i class="fas fa-tint"></i> Ferritina: <strong th:text="${ultimoAnalisis.ferritinaSerica}"></strong> ng/mL</span>
+                                <span>Hierro sérico: <strong th:text="${ultimoAnalisis.hierroSerico}"></strong> µg/dL</span>
+                            </div>
+                            <div th:if="${ultimoAnalisis.hemoglobina < 10}" class="metric-header" style="color:#b94b2c; margin-top:6px;">
+                                <i class="fas fa-exclamation-triangle"></i> Anemia severa detectada · intervención prioritaria
+                            </div>
+                        </div>
+                    </th:block>
+                    <th:block th:unless="${ultimoAnalisis != null}">
+                        <div class="iron-section">
+                            <i class="fas fa-info-circle"></i> No hay análisis hematológicos registrados.
+                        </div>
+                    </th:block>
+
+                    <!-- Acciones rápidas -->
+                    <div class="action-row">
+                        <div class="action-secondary" id="quickAlimentosBtn"><i class="fas fa-apple-alt"></i> Alimentos ricos en hierro</div>
+                        <div class="action-secondary" id="quickSuplementoBtn"><i class="fas fa-capsules"></i> Suplementación sugerida</div>
                     </div>
 
-                    <!-- Campo oculto con el ID del estudiante para el script -->
-                    <input type="hidden" id="estudianteId" th:value="${estudiante.id}">
-
-                    <!-- Botón para generar con AJAX -->
-                    <button class="btn-recomendar" id="btnGenerar">
-                        🧠 Generar Recomendación IA
+                    <!-- Botón IA -->
+                    <button class="btn-ia" id="generarIaEstudianteBtn">
+                        <i class="fas fa-microchip"></i> Generar Recomendación IA Avanzada
                     </button>
 
-                    <!-- Zona de resultado -->
-                    <div class="recomendacion" id="respuestaIA"></div>
-                    <div class="loading" id="loadingIA" style="display:none;">
-                        ⏳ Generando recomendaciones con Gemini AI...
+                    <!-- Resultado de IA -->
+                    <div id="recomendacionEstudiante" class="recom-box">
+                        <i class="fas fa-brain"></i> <strong>IA Recomendaciones</strong><br><br>
+                        Haz clic en "Generar Recomendación IA" para obtener un plan personalizado basado en su perfil nutricional y cultural.
+                    </div>
+                    <div id="loadingEstudiante" class="loading-ia">
+                        <i class="fas fa-circle-notch fa-spin"></i> Analizando con Gemini AI...
                     </div>
                 </div>
             </div>
 
-            <!-- ========== PANEL DERECHO ========== -->
-            <div class="right">
-                <h2 style="font-size:22px; margin-bottom:20px; color:#1e293b;">📋 Mis Estudiantes</h2>
-                <th:block th:each="est : ${estudiantes}">
-                    <a th:href="@{/recomendaciones/{id}(id=${est.id})}"
-                       class="estudiante-card"
-                       th:classappend="${est.id == estudiante.id} ? 'active'">
-                        <div class="nombre" th:text="${est.nombreCompleto}"></div>
-                        <div class="detalle">
-                            Edad: <span th:text="${est.edad}"></span> años<br>
-                            Nivel: <span th:text="${est.nivelSocioeconomico}"></span>
-                        </div>
-                    </a>
-                </th:block>
+            <!-- ========== PANEL DERECHO: LISTA DE ESTUDIANTES ========== -->
+            <div class="right-panel">
+                <div class="right-title">
+                    <i class="fas fa-users"></i> Mis Estudiantes
+                </div>
+                <div id="studentsListContainer">
+                    <th:block th:each="est : ${estudiantes}">
+                        <a th:href="@{/recomendaciones/{id}(id=${est.id})}" 
+                           class="estudiante-card" 
+                           th:classappend="${est.id == estudiante.id} ? 'active'"
+                           th:attr="data-id=${est.id}, data-nombre=${est.nombreCompleto}">
+                            <div class="nombre">
+                                <i class="fas" th:classappend="${est.sexo == 'M' ? 'fa-user-circle' : 'fa-user-circle'}"></i>
+                                <span th:text="${est.nombreCompleto}"></span>
+                            </div>
+                            <div class="detalle">
+                                Edad: <span th:text="${est.edad}"></span> años · Nivel: <span th:text="${est.nivelSocioeconomico}"></span>
+                                <th:block th:if="${not #lists.isEmpty(est.analisisHematologicos)}">
+                                    <br><i class="fas fa-tint"></i> Tiene análisis registrados
+                                </th:block>
+                            </div>
+                        </a>
+                    </th:block>
+                </div>
             </div>
-
         </div>
     </div>
 
-    <!-- Fragmento del footer -->
     <div th:replace="~{fragments :: footer}"></div>
 
-    <!-- Script para llamada AJAX sin errores de Thymeleaf -->
+    <!-- Botón de voz flotante -->
+    <button id="voiceAssistantBtn" class="voice-btn" title="Asistente de voz (di el nombre del estudiante)">
+        <i class="fas fa-microphone"></i>
+    </button>
+    <div id="voiceStatus" class="voice-status"></div>
+
+    <div id="toastNotif" class="toast-msg"><i class="fas fa-leaf"></i> <span id="toastText"></span></div>
+
     <script>
-        document.getElementById('btnGenerar').addEventListener('click', function() {
-            const respuestaDiv = document.getElementById('respuestaIA');
-            const loadingDiv = document.getElementById('loadingIA');
-            const estudianteId = document.getElementById('estudianteId').value; // tomado del input oculto
+    (function() {
+        // =========== DATOS DEL ESTUDIANTE ACTUAL ==========
+        const leftPanel = document.getElementById('leftPanel');
+        const estudianteId = leftPanel.dataset.estudianteId;
+        const nombre = leftPanel.dataset.estudianteNombre;
+        const cultura = leftPanel.dataset.estudianteCultura || '';
+        const hemoglobina = parseFloat(leftPanel.dataset.hemoglobina) || 0;
 
-            respuestaDiv.style.display = 'none';
+        // =========== FUNCIONES COMUNES ==========
+        function showToast(message, bgColor = "#2a5432") {
+            const toastDiv = document.getElementById('toastNotif');
+            const toastText = document.getElementById('toastText');
+            toastText.innerText = message;
+            toastDiv.style.backgroundColor = bgColor;
+            toastDiv.style.opacity = '1';
+            setTimeout(() => { toastDiv.style.opacity = '0'; }, 3000);
+        }
+
+        // =========== GENERACIÓN DE RECOMENDACIÓN ==========
+        const btnIA = document.getElementById('generarIaEstudianteBtn');
+        const recomDiv = document.getElementById('recomendacionEstudiante');
+        const loadingDiv = document.getElementById('loadingEstudiante');
+
+        async function generarYMostrarRecomendacion() {
+            if (btnIA.disabled) return;
+            btnIA.disabled = true;
             loadingDiv.style.display = 'block';
+            recomDiv.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Conectando con inteligencia nutricional...';
+            try {
+                const response = await fetch('/recomendaciones/generar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'estudianteId=' + encodeURIComponent(estudianteId)
+                });
+                if (!response.ok) throw new Error('Error del servidor');
+                const texto = await response.text();
+                recomDiv.innerHTML = texto.replace(/\n/g, '<br>');
+                showToast(`✅ Recomendación IA generada para ${nombre}`, "#2e6738");
+                return texto;
+            } catch (err) {
+                recomDiv.innerHTML = '<strong>❌ Error</strong> No se pudo generar la recomendación. Intente nuevamente.';
+                showToast("Error con el servicio IA", "#a1422f");
+                return null;
+            } finally {
+                loadingDiv.style.display = 'none';
+                btnIA.disabled = false;
+            }
+        }
 
-            fetch('/recomendaciones/generar', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'estudianteId=' + encodeURIComponent(estudianteId)
-            })
-            .then(response => response.text())
-            .then(texto => {
-                loadingDiv.style.display = 'none';
-                respuestaDiv.style.display = 'block';
-                respuestaDiv.innerHTML = '<strong>✅ Recomendación nutricional:</strong><br><br>' + texto.replace(/\n/g, '<br>');
-            })
-            .catch(error => {
-                loadingDiv.style.display = 'none';
-                respuestaDiv.style.display = 'block';
-                respuestaDiv.innerHTML = '<strong>❌ Error:</strong> No se pudo conectar con la IA.';
+        btnIA.addEventListener('click', generarYMostrarRecomendacion);
+
+        // =========== LECTURA DE TEXTO (TTS) ==========
+        function leerTexto(texto) {
+            if (!window.speechSynthesis) {
+                showToast("Tu navegador no soporta lectura de voz", "#a1422f");
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(texto);
+            utterance.lang = 'es-ES';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // =========== BOTONES DE ACCIONES RÁPIDAS (sin cambios) ==========
+        // (mantén los listeners de quickAlimentos y quickSuplemento exactamente igual que antes)
+        document.getElementById('quickAlimentosBtn').addEventListener('click', function() {
+            let mensaje = "";
+            if (cultura.includes("Selva")) {
+                mensaje = "🍗 Sangrecita de pollo, hígado, pescados amazónicos (paiche, doncella, gamitana), camu camu, yuca fortificada.";
+            } else if (cultura.includes("Sierra") || cultura.includes("Andina")) {
+                mensaje = "🍲 Quinua, kiwicha, sangrecita de cordero, habas, chuño de papa, jugo de sauco.";
+            } else {
+                mensaje = "🥩 Bazo, hígado de res, pescado bonito, lentejas, espinaca, acelga con limón, naranja.";
+            }
+            showToast(mensaje.substring(0, 100) + "...", "#8c6a2c");
+            const nota = document.createElement('div');
+            nota.style.position = 'fixed';
+            nota.style.bottom = '80px';
+            nota.style.left = '20px';
+            nota.style.backgroundColor = '#fff4e0';
+            nota.style.padding = '10px 18px';
+            nota.style.borderRadius = '24px';
+            nota.style.fontSize = '0.75rem';
+            nota.style.borderLeft = '4px solid #e67e22';
+            nota.style.zIndex = '999';
+            nota.innerHTML = '<i class="fas fa-carrot"></i> ' + mensaje;
+            document.body.appendChild(nota);
+            setTimeout(() => nota.remove(), 4000);
+        });
+
+        document.getElementById('quickSuplementoBtn').addEventListener('click', function() {
+            const hb = hemoglobina;
+            let textoSuple = `
+                <strong>💊 Suplementación sugerida para ${nombre}</strong><br><br>
+                • ${hb < 10 ? 'Sulfato ferroso gotas: 3-5 mg/kg/día durante 3 meses bajo supervisión pediátrica.' : 'Suplemento con micronutrientes (hierro + vitamina C) 2 veces por semana.'}<br>
+                • Ácido fólico y reforzar ingesta de vitamina C diaria.<br>
+                • Evaluar desparasitación anual y nutricionista.<br>
+                • Control de hemoglobina cada 30 días hasta normalización.
+            `;
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+            modal.style.backdropFilter = 'blur(4px)';
+            modal.style.display = 'flex';
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            modal.style.zIndex = '2000';
+            modal.innerHTML = `
+                <div style="background: white; max-width: 400px; border-radius: 32px; padding: 1.6rem; margin: 1rem; box-shadow: 0 20px 30px rgba(0,0,0,0.2);">
+                    <h3 style="color:#216e3a;"><i class="fas fa-syringe"></i> Suplementación sugerida</h3>
+                    <div style="margin: 16px 0; line-height: 1.5;">${textoSuple}</div>
+                    <button id="closeSupleModal" style="background:#2a6a3c; border: none; color:white; padding: 10px; border-radius: 40px; width:100%; cursor:pointer;">Entendido, aplicar seguimiento</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            document.getElementById('closeSupleModal').addEventListener('click', () => {
+                modal.remove();
+                showToast("Recomendación de suplementación registrada", "#2d6936");
             });
         });
-    </script>
-</body>
-</html>
+
+        // ========== FUNCIONALIDAD DE VOZ MEJORADA ==========
+        const voiceBtn = document.getElementById('voiceAssistantBtn');
+        const voiceStatus = document.getElementById('voiceStatus');
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            voiceBtn.style.display = 'none';
+        }
+
+        let recognition;
+        let isListening = false;
+
+        // Función para normalizar texto: quitar tildes, pasar a minúsculas, eliminar signos
+        function normalize(str) {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-záéíóúüñ\s]/g, "");
+        }
+
+        // Tokenizar eliminando palabras cortas (menos de 3 letras) y stopwords
+        function tokenize(text) {
+            const stopWords = ['de', 'la', 'el', 'los', 'las', 'un', 'una', 'para', 'ver', 'quiero', 'con', 'por', 'que', 'del', 'al', 'en', 'lo', 'su', 'es', 'y'];
+            return text.split(/\s+/).filter(w => w.length > 2 && !stopWords.includes(w));
+        }
+
+        // Construir lista de estudiantes con tokens normalizados
+        function getStudentData() {
+            const cards = document.querySelectorAll('.estudiante-card');
+            const students = [];
+            cards.forEach(card => {
+                const nameSpan = card.querySelector('.nombre span');
+                if (nameSpan) {
+                    const fullName = nameSpan.textContent.trim();
+                    const id = card.dataset.id;
+                    const url = card.href;
+                    const normalizedFull = normalize(fullName);
+                    const tokens = tokenize(normalizedFull);
+                    students.push({ id, fullName, normalizedFull, tokens, url });
+                }
+            });
+            return students;
+        }
+
+        function startListening() {
+            if (isListening) return;
+            const students = getStudentData();
+            if (students.length === 0) {
+                showToast("No hay estudiantes para reconocer", "#a1422f");
+                return;
+            }
+
+            recognition = new SpeechRecognition();
+            recognition.lang = 'es-ES';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.onstart = function() {
+                isListening = true;
+                voiceBtn.classList.add('listening');
+                voiceStatus.style.display = 'block';
+                voiceStatus.textContent = 'Escuchando... Di el nombre del estudiante';
+            };
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript.trim();
+                const normTranscript = normalize(transcript);
+                const tokensTranscript = tokenize(normTranscript);
+                voiceStatus.textContent = 'Procesando: ' + transcript;
+
+                // Buscar coincidencia: algún token del estudiante aparece en el transcript o viceversa
+                let bestMatch = null;
+                let bestScore = 0;
+
+                for (let student of students) {
+                    const studentTokens = student.tokens;
+                    // Calcular puntuación simple: cuántos tokens del estudiante aparecen en el transcript
+                    let matchCount = 0;
+                    for (let stok of studentTokens) {
+                        if (tokensTranscript.includes(stok) || normTranscript.includes(stok)) {
+                            matchCount++;
+                        }
+                    }
+                    // También verificar si el transcript contiene una parte significativa del nombre completo
+                    if (normTranscript.includes(student.normalizedFull)) matchCount += 5;
+                    if (student.normalizedFull.includes(normTranscript)) matchCount += 3;
+
+                    if (matchCount > bestScore) {
+                        bestScore = matchCount;
+                        bestMatch = student;
+                    }
+                }
+
+                if (bestMatch && bestScore > 0) {
+                    const currentStudentId = leftPanel.dataset.estudianteId;
+                    if (bestMatch.id === currentStudentId) {
+                        voiceStatus.textContent = `Generando recomendación para ${bestMatch.fullName}...`;
+                        generarYMostrarRecomendacion().then(texto => {
+                            if (texto) {
+                                voiceStatus.textContent = 'Leyendo recomendación...';
+                                leerTexto(texto);
+                            }
+                        });
+                    } else {
+                        sessionStorage.setItem('autoGenerateAndRead', bestMatch.id);
+                        voiceStatus.textContent = `Navegando a ${bestMatch.fullName}...`;
+                        setTimeout(() => {
+                            window.location.href = bestMatch.url;
+                        }, 500);
+                    }
+                } else {
+                    voiceStatus.textContent = 'No se reconoció ningún estudiante. Intenta de nuevo.';
+                    showToast("No se encontró el estudiante", "#a1422f");
+                }
+            };
+
+            recognition.onerror = function(event) {
+                voiceStatus.textContent = 'Error: ' + event.error;
+                showToast("Error en reconocimiento de voz", "#a1422f");
+                stopListening();
+            };
+
+            recognition.onend = function() {
+                stopListening();
+            };
+
+            recognition.start();
+        }
+
+        function stopListening() {
+            if (recognition) recognition.abort();
+            isListening = false;
+            voiceBtn.classList.remove('listening');
+            voiceStatus.style.display = 'none';
+        }
+
+        voiceBtn.addEventListener('click', function() {
+            if (isListening) {
+                stopListening();
+            } else {
+                startListening();
+            }
+        });
+
+        // ========== AUTO-EJECUCIÓN AL CARGAR (para navegación por voz) ==========
+        window.addEventListener('DOMContentLoaded', function() {
+            const autoFlag = sessionStorage.getItem('autoGenerateAndRead');
+            if (autoFlag && autoFlag === estudianteId) {
+                sessionStorage.removeItem('autoGenerateAndRead');
+                setTimeout(async () => {
+                    const texto = await generarYMostrarRecomendacion();
+                    if (texto) leerTexto(texto);
+                }, 500);
+            }
+        });
+
+    })();
+</script>

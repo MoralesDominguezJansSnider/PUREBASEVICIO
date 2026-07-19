@@ -6,7 +6,9 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "alimento_nutritivo")
-@Data @NoArgsConstructor @AllArgsConstructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AlimentoNutritivo {
 
     @Id
@@ -31,7 +33,7 @@ public class AlimentoNutritivo {
     @Column(precision = 5, scale = 2)
     private BigDecimal calcio;
 
-    @Column(name = "vitamina_a", precision = 5, scale = 2)
+    @Column(name = "vitamina_a", precision = 8, scale = 2)
     private BigDecimal vitaminaA;
 
     @Column(name = "vitamina_c", precision = 5, scale = 2)
@@ -40,7 +42,20 @@ public class AlimentoNutritivo {
     @Column(name = "imagen_url", length = 255)
     private String imagenUrl;
 
+
+    // H012 - Porción recomendada
+    @Column(name = "porcion_recomendada", length = 100)
+    private String porcionRecomendada;
+
+
     public enum Categoria {
-        FRUTAS, VERDURAS, CARNES, CEREALES, LACTEOS, LEGUMBRES, PESCADOS
+        FRUTAS,
+        VERDURAS,
+        CARNES,
+        CEREALES,
+        LACTEOS,
+        LEGUMBRES,
+        PESCADOS,
+        PLATOS
     }
 }

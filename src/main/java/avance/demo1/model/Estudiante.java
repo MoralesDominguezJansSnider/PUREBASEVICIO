@@ -65,7 +65,7 @@ public class Estudiante {
     private Usuario padre;
 
     // Relaciones uno a muchos
-    @OneToMany(mappedBy = "estudiante", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "estudiante", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
     private List<AnalisisHematologico> analisisHematologicos = new ArrayList<>();
 
     @OneToMany(mappedBy = "estudiante", cascade = CascadeType.ALL, orphanRemoval = true)

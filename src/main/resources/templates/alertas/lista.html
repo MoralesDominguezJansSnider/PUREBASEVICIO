@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Alertas Nutricionales</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: header}"></div>
+<div th:replace="~{fragments :: navbar}"></div>
+<div class="container">
+    <div class="card">
+        <h2>⚠️ Alertas Críticas</h2>
+        <p>
+            Estudiantes ordenados por nivel de hemoglobina (mayor riesgo primero)
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Edad</th>
+                    <th>Hb (g/dL)</th>
+                    <th>Riesgo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="est : ${criticos}">
+                    <td th:text="${est.nombreCompleto}"></td>
+                    <td th:text="${est.edad}"></td>
+                    <!-- Último análisis -->
+                    <td th:text="${est.analisisHematologicos[0].hemoglobina}">
+                    </td>
+                    <td>
+                        <span th:if="${est.analisisHematologicos[0].hemoglobina < 9}"
+                              style="color:red;font-weight:bold;">
+                            Crítico
+                        </span>
+                        <span th:if="${est.analisisHematologicos[0].hemoglobina >= 9 
+                                      and est.analisisHematologicos[0].hemoglobina < 11}"
+                              style="color:orange;">
+                            Moderado
+                        </span>
+                        <span th:if="${est.analisisHematologicos[0].hemoglobina >= 11}"
+                              style="color:green;">
+                            Normal
+                        </span>
+                    </td>
+                    <td>
+                        <a th:href="@{/estudiantes/{id}(id=${est.id})}" 
+                           class="btn">
+                            Perfil
+                        </a>
+                        <a th:href="@{/hematologia/{id}(id=${est.id})}" 
+                           class="btn">
+                            Análisis
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div th:replace="~{fragments :: footer}"></div>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard · NutriVida Admin</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div th:replace="~{fragments :: header}"></div>
+<div th:replace="~{fragments :: navbar}"></div>
+<div class="container">
+    <!-- ======================= -->
+    <!-- TARJETAS RESUMEN -->
+    <!-- ======================= -->
+    <div class="card dashboard-panel">
+        <div class="dashboard-header">
+            <h2>📊 Panel de Administración</h2>
+            <p>Resumen general del sistema NutriVida</p>
+        </div>
+        <div class="stats">
+            <div class="stat-card student-card">
+                <div class="stat-icon">👨‍🎓</div>
+                <div>
+                    <h3 th:text="${totalEstudiantes}">
+                        0
+                    </h3>
+                    <span>Total estudiantes</span>
+                </div>
+            </div>
+            <div class="stat-card alert-card">
+                <div class="stat-icon">⚠️</div>
+                <div>
+                    <h3 th:text="${totalCriticos}">
+                        0
+                    </h3>
+                    <span>Alertas críticas (Hb &lt; 9)</span>
+                </div>
+            </div>
+            <div class="stat-card obs-card">
+                <div class="stat-icon">📝</div>
+                <div>
+                    <h3 th:text="${totalObservaciones}">
+                        0
+                    </h3>
+                    <span>Con observaciones</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ======================= -->
+    <!-- H041 -->
+    <!-- ALERTAS -->
+    <!-- ======================= -->
+    <div class="card">
+        <h3>⚠️ Alertas críticas</h3>
+        <table class="table" th:if="${!#lists.isEmpty(criticos)}">
+            <thead>
+            <tr>
+                <th>Estudiante</th>
+                <th>Edad</th>
+                <th>Observaciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="est : ${criticos}">
+                <td th:text="${est.nombreCompleto}">
+                </td>
+                <td th:text="${est.edad}">
+                </td>
+                <td>
+                    <a class="btn"
+                       th:href="@{/estudiantes/{id}(id=${est.id})}">
+                        Ver perfil
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <p th:if="${#lists.isEmpty(criticos)}">
+            ✅ No existen alertas críticas registradas.
+        </p>
+    </div>
+    <!-- ======================= -->
+    <!-- H042 -->
+    <!-- OBSERVACIONES -->
+    <!-- ======================= -->
+    <div class="card">
+        <h3>📝 Observaciones generales</h3>
+        <table class="table" th:if="${!#lists.isEmpty(conObservaciones)}">
+            <thead>
+            <tr>
+                <th>Estudiante</th>
+                <th>Observación</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="est : ${conObservaciones}">
+                <td th:text="${est.nombreCompleto}">
+                </td>
+                <td th:text="${est.observaciones}">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <p th:if="${#lists.isEmpty(conObservaciones)}">
+            No existen observaciones registradas.
+        </p>
+    </div>
+    <!-- ======================= -->
+    <!-- H043 -->
+    <!-- MÉTRICAS -->
+    <!-- ======================= -->
+    <div class="card">
+        <h3>📈 Métricas nutricionales globales</h3>
+        <canvas id="graficoNutrientes"
+                height="120">
+        </canvas>
+    </div>
+    <!-- ======================= -->
+    <!-- BOTONES -->
+    <!-- ======================= -->
+    <div class="card quick-actions">
+        <h3>⚡ Acciones rápidas</h3>
+        <a th:href="@{/alertas}"
+           class="btn">
+            Ver todas las alertas
+        </a>
+    </div>
+</div>
+<div th:replace="~{fragments :: footer}"></div>
+<script th:inline="javascript">
+    let datos = /*[[${promediosGlobales}]]*/ [];
+    const canvas = document.getElementById("graficoNutrientes");
+    if (canvas) {
+        new Chart(canvas, {
+            type: 'bar',
+            data: {
+                labels: [
+                    'Hierro',
+                    'Vitamina C',
+                    'Proteínas',
+                    'Calcio',
+                    'Vitamina A'
+                ],
+                datasets: [{
+                    label: '% VDR Promedio',
+                    data: datos,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

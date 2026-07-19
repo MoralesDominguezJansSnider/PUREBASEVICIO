@@ -1,0 +1,30 @@
+<!--
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Responder Mensaje</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+    <div th:replace="~{fragments :: header}"></div>
+    <div th:replace="~{fragments :: navbar}"></div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Responder</h2>
+            <form th:action="@{/mensajes/responder/{id}(id=${idOriginal})}" th:object="${mensaje}" method="post">
+                <input type="hidden" th:field="*{destinatario.id}" />
+                <input type="hidden" th:field="*{estudiante.id}" />
+                <label>Para: <strong th:text="${mensaje.destinatario.nombre}"></strong></label>
+                <label>Mensaje:</label>
+                <textarea th:field="*{contenido}" rows="5" required></textarea>
+                <button type="submit" class="btn">Enviar respuesta</button>
+                <a th:href="@{/mensajes}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments :: footer}"></div>
+</body>
+</html>

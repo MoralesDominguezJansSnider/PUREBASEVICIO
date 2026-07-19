@@ -11,7 +11,7 @@ CREATE TABLE usuario (
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    rol ENUM('PADRE', 'DOCENTE', 'SALUD') NOT NULL,
+    rol ENUM('PADRE', 'DOCENTE', 'SALUD', 'ADMIN') NOT NULL,
     codigo_vinculacion VARCHAR(10) UNIQUE,   -- solo para padres
     activo BOOLEAN DEFAULT TRUE
 ) ENGINE=InnoDB;
@@ -98,7 +98,26 @@ CREATE TABLE alimento_nutritivo (
     vitamina_c DECIMAL(5,2),
     imagen_url VARCHAR(255)
 ) ENGINE=InnoDB;
+ALTER TABLE alimento_nutritivo ADD COLUMN porcion_recomendada VARCHAR(100);
+ALTER TABLE alimento_nutritivo 
+MODIFY categoria ENUM(
+    'FRUTAS',
+    'VERDURAS',
+    'CARNES',
+    'CEREALES',
+    'LACTEOS',
+    'LEGUMBRES',
+    'PESCADOS',
+    'PLATOS'
+);
 
+ALTER TABLE alimento_nutritivo
+MODIFY vitamina_a DECIMAL(8,2);
+-- 1. Vaciar datos antiguos
+DELETE FROM alimento_nutritivo;
+
+-- 2. Reiniciar IDs
+ALTER TABLE alimento_nutritivo AUTO_INCREMENT = 1;
 -- -----------------------------------------------------
 -- Tabla: mensaje (comunicación entre usuarios)
 -- -----------------------------------------------------
@@ -144,3 +163,6 @@ INSERT INTO usuario (nombre, email, password, rol, codigo_vinculacion, activo)
 VALUES ('Dr. Carlos', 'salud@test.com', '1234', 'SALUD', NULL, 1);
 
 
+ALTER TABLE usuario MODIFY COLUMN rol ENUM('PADRE', 'DOCENTE', 'SALUD', 'ADMIN') NOT NULL;
+INSERT INTO usuario (nombre, email, password, rol, codigo_vinculacion, activo)
+VALUES ('Administrador', 'admin@test.com', '1234', 'ADMIN', NULL, 1);

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <link rel="stylesheet" th:href="@{/css/WAS.css}">
+</head>
+<body>
+    <div th:replace="~{fragments :: header}"></div>
+    <div th:replace="~{fragments :: navbar}"></div>
+    <div class="chat-container">
+        <!-- =========================
+         PANEL DE CONTACTOS
+         ========================= -->
+        <div class="contactos-panel">
+            <div class="chat-header">
+                <h2>Mensajes</h2>
+            </div>
+            <div class="contacto" th:each="v : ${contactos}">
+                <!-- CONTACTO SI ES PADRE -->
+                <a th:if="${usuarioActual.rol.name() == 'PADRE'}"
+                    th:href="@{/mensajes/chat/{id}(id=${v.usuarioVinculado.id})}" class="contacto-link">
+                    <div class="avatar">
+                        <span th:text="${v.usuarioVinculado.nombre.substring(0,1)}">
+                        </span>
+                    </div>
+                    <div class="contacto-info">
+                        <strong th:text="${v.usuarioVinculado.nombre}">
+                        </strong>
+                        <small th:text="${v.usuarioVinculado.rol}">
+                        </small>
+                    </div>
+                </a>
+                <!-- CONTACTO SI ES PROFESIONAL -->
+                <a th:if="${usuarioActual.rol.name() != 'PADRE'}" th:href="@{/mensajes/chat/{id}(id=${v.padre.id})}"
+                    class="contacto-link">
+                    <div class="avatar">
+                        <span th:text="${v.padre.nombre.substring(0,1)}">
+                        </span>
+                    </div>
+                    <div class="contacto-info">
+                        <strong th:text="${v.padre.nombre}">
+                        </strong>
+                        <small>
+                            Padre
+                        </small>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <!-- =========================
+         PANEL DE CONVERSACIÓN
+         ========================= -->
+        <div class="conversacion">
+            <div class="chat-header">
+                <h2>
+                    Conversación
+                </h2>
+            </div>
+            <!-- MENSAJES -->
+            <div class="mensajes-box">
+                <div th:each="m : ${mensajes}" th:class="${m.remitente.id == usuarioActual.id} 
+                 ? 'mensaje enviado' 
+                 : 'mensaje recibido'">
+                    <p th:text="${m.contenido}">
+                    </p>
+                    <span th:text="${#temporals.format(m.fechaEnvio,'HH:mm')}">
+                    </span>
+                </div>
+                <div th:if="${#lists.isEmpty(mensajes)}" class="sin-mensajes">
+                    No hay mensajes todavía.
+                </div>
+            </div>
+            <!-- CAJA PARA ESCRIBIR -->
+            <div class="zona-envio">
+                <form th:action="@{/mensajes/chat/enviar}" method="post">
+                    <input type="hidden" name="destinatarioId" th:value="${contactoId}">
+                    <textarea name="contenido" placeholder="Escribe un mensaje..." required>
+                </textarea>
+                    <button type="submit" class="btn">
+                        Enviar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div th:replace="~{fragments :: footer}"></div>
+</body>
+</html>

@@ -35,6 +35,6 @@ public class Usuario {
     private Boolean activo = true;
 
     public enum Rol {
-        PADRE, DOCENTE, SALUD
+        PADRE, DOCENTE, SALUD, ADMIN   // ← ADMIN agregado
     }
 }

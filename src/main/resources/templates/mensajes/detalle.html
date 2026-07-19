@@ -1,0 +1,28 @@
+<!--
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de Mensaje</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+    <div th:replace="~{fragments :: header}"></div>
+    <div th:replace="~{fragments :: navbar}"></div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Mensaje</h2>
+            <p><strong>De:</strong> <span th:text="${mensaje.remitente.nombre}"></span></p>
+            <p><strong>Fecha:</strong> <span th:text="${mensaje.fechaEnvio}"></span></p>
+            <div style="background:#f9f9f9; padding:15px; border-radius:8px; margin:15px 0;">
+                <p th:text="${mensaje.contenido}"></p>
+            </div>
+            <a th:href="@{/mensajes/responder/{id}(id=${mensaje.id})}" class="btn">Responder</a>
+            <a th:href="@{/mensajes}" class="btn btn-secondary">Volver a la bandeja</a>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments :: footer}"></div>
+</body>
+</html>     

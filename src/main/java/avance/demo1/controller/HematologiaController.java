@@ -16,7 +16,8 @@ public class HematologiaController {
     private final AnalisisHematologicoRepository analisisRepo;
     private final EstudianteService estudianteService;
 
-    public HematologiaController(AnalisisHematologicoRepository analisisRepo, EstudianteService estudianteService) {
+    public HematologiaController(AnalisisHematologicoRepository analisisRepo,
+                                 EstudianteService estudianteService) {
         this.analisisRepo = analisisRepo;
         this.estudianteService = estudianteService;
     }
@@ -41,5 +42,17 @@ public class HematologiaController {
     public String guardar(@ModelAttribute AnalisisHematologico analisis) {
         analisisRepo.save(analisis);
         return "redirect:/hematologia/" + analisis.getEstudiante().getId();
+    }
+
+    @PostMapping("/eliminar/{id}")
+    public String eliminar(@PathVariable Long id) {
+        AnalisisHematologico analisis = analisisRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Análisis no encontrado"));
+
+        Long estudianteId = analisis.getEstudiante().getId();
+
+        analisisRepo.delete(analisis);
+
+        return "redirect:/hematologia/" + estudianteId;
     }
 }

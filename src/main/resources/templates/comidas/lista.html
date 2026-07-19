@@ -2,48 +2,81 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Historial de Comidas</title>
-       <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
 </head>
 <body>
     <div th:replace="~{fragments :: header}"></div>
     <div th:replace="~{fragments :: navbar}"></div>
-
     <div class="container">
         <div class="card">
-    <h1>Comidas de <span th:text="${estudiante.nombreCompleto}"></span></h1>
-    <a th:href="@{/comidas/nuevo/{id}(id=${estudiante.id})}" class="btn">Agregar comida</a>
-    <table>
-        <tr><th>Fecha</th><th>Tipo</th><th>Alimento</th><th>Porciones</th>
-            <th>Hierro</th><th>Vit C</th><th>Proteínas</th><th>Calcio</th><th>Vit A</th></tr>
-        <tr th:each="c : ${comidas}">
-            <td th:text="${c.fecha}"></td>
-            <td th:text="${c.tipo}"></td>
-            <td th:text="${c.alimento}"></td>
-            <td th:text="${c.porciones}"></td>
-            <td th:if="${c.analisisNutricional != null}">
-                <span th:text="${c.analisisNutricional.hierroPct} + '%'"
-                      th:classappend="${c.analisisNutricional.hierroPct < 50} ? 'rojo' : (${c.analisisNutricional.hierroPct < 80} ? 'amarillo' : 'verde')"></span>
-            </td>
-            <td th:if="${c.analisisNutricional != null}">
-                <span th:text="${c.analisisNutricional.vitaminaCPct} + '%'"
-                      th:classappend="${c.analisisNutricional.vitaminaCPct < 50} ? 'rojo' : (${c.analisisNutricional.vitaminaCPct < 80} ? 'amarillo' : 'verde')"></span>
-            </td>
-            <td th:if="${c.analisisNutricional != null}">
-                <span th:text="${c.analisisNutricional.proteinasPct} + '%'"
-                      th:classappend="${c.analisisNutricional.proteinasPct < 50} ? 'rojo' : (${c.analisisNutricional.proteinasPct < 80} ? 'amarillo' : 'verde')"></span>
-            </td>
-            <td th:if="${c.analisisNutricional != null}">
-                <span th:text="${c.analisisNutricional.calcioPct} + '%'"
-                      th:classappend="${c.analisisNutricional.calcioPct < 50} ? 'rojo' : (${c.analisisNutricional.calcioPct < 80} ? 'amarillo' : 'verde')"></span>
-            </td>
-            <td th:if="${c.analisisNutricional != null}">
-                <span th:text="${c.analisisNutricional.vitaminaAPct} + '%'"
-                      th:classappend="${c.analisisNutricional.vitaminaAPct < 50} ? 'rojo' : (${c.analisisNutricional.vitaminaAPct < 80} ? 'amarillo' : 'verde')"></span>
-            </td>
-            <td th:unless="${c.analisisNutricional != null}" class="btn">Sin análisis</td>
-        </tr>
-    </table>
-    <a th:href="@{/estudiantes}" class="btn">Volver al estudiante</a>
+            <h1>
+                Comidas de
+                <span th:text="${estudiante.nombreCompleto}"></span>
+            </h1>
+            <a th:href="@{/comidas/nuevo/{id}(id=${estudiante.id})}" class="btn">
+                Agregar comida
+            </a>
+            <table>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Tipo</th>
+                    <th>Alimento</th>
+                    <th>Porciones</th>
+                    <th>Hierro</th>
+                    <th>Vit C</th>
+                    <th>Proteínas</th>
+                    <th>Calcio</th>
+                    <th>Vit A</th>
+                    <th>Acciones</th>
+                </tr>
+                <tr th:each="c : ${comidas}">
+                    <td th:text="${c.fecha}"></td>
+                    <td th:text="${c.tipo}"></td>
+                    <td th:text="${c.alimento}"></td>
+                    <td th:text="${c.porciones}"></td>
+                    <td th:if="${c.analisisNutricional != null}">
+                        <span th:text="${c.analisisNutricional.hierroPct} + '%'"
+                            th:classappend="${c.analisisNutricional.hierroPct < 50} ? 'rojo' : (${c.analisisNutricional.hierroPct < 80} ? 'amarillo' : 'verde')">
+                        </span>
+                    </td>
+                    <td th:if="${c.analisisNutricional != null}">
+                        <span th:text="${c.analisisNutricional.vitaminaCPct} + '%'"
+                            th:classappend="${c.analisisNutricional.vitaminaCPct < 50} ? 'rojo' : (${c.analisisNutricional.vitaminaCPct < 80} ? 'amarillo' : 'verde')">
+                        </span>
+                    </td>
+                    <td th:if="${c.analisisNutricional != null}">
+                        <span th:text="${c.analisisNutricional.proteinasPct} + '%'"
+                            th:classappend="${c.analisisNutricional.proteinasPct < 50} ? 'rojo' : (${c.analisisNutricional.proteinasPct < 80} ? 'amarillo' : 'verde')">
+                        </span>
+                    </td>
+                    <td th:if="${c.analisisNutricional != null}">
+                        <span th:text="${c.analisisNutricional.calcioPct} + '%'"
+                            th:classappend="${c.analisisNutricional.calcioPct < 50} ? 'rojo' : (${c.analisisNutricional.calcioPct < 80} ? 'amarillo' : 'verde')">
+                        </span>
+                    </td>
+                    <td th:if="${c.analisisNutricional != null}">
+                        <span th:text="${c.analisisNutricional.vitaminaAPct} + '%'"
+                            th:classappend="${c.analisisNutricional.vitaminaAPct < 50} ? 'rojo' : (${c.analisisNutricional.vitaminaAPct < 80} ? 'amarillo' : 'verde')">
+                        </span>
+                    </td>
+                    <td th:unless="${c.analisisNutricional != null}">
+                        Sin análisis
+                    </td>
+                    <td>
+                        <form th:action="@{/comidas/eliminar/{id}(id=${c.id})}"
+                              method="post"
+                              onsubmit="return confirm('¿Está seguro de eliminar esta comida?');">
+                            <button type="submit" class="btn btn-danger">
+                                Eliminar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+            <br>
+            <a th:href="@{/estudiantes}" class="btn">
+                Volver al estudiante
+            </a>
         </div>
     </div>
 </body>

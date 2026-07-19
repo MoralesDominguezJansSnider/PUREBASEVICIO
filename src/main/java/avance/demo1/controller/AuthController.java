@@ -19,7 +19,7 @@ public class AuthController {
 
     @GetMapping("/")
     public String index(Model model) {
-        // Mostrar las 3 opciones de rol
+        // Mostrar las opciones de rol (ahora incluye ADMIN)
         model.addAttribute("roles", Usuario.Rol.values());
         return "index";
     }
@@ -39,6 +39,8 @@ public class AuthController {
                 case DOCENTE:
                 case SALUD:
                     return "redirect:/vinculacion";
+                case ADMIN:
+                    return "redirect:/dashboard";
                 default:
                     return "redirect:/";
             }

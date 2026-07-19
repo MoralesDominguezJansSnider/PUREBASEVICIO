@@ -4,36 +4,159 @@
     <meta charset="UTF-8">
     <title>Mis Estudiantes</title>
     <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <link rel="stylesheet" th:href="@{/css/lista.css}">
+    <link rel="icon" th:href="@{/favicon.ico}">
 </head>
 <body>
-    <div th:replace="~{fragments :: header}"></div>
-    <div th:replace="~{fragments :: navbar}"></div>
-
-    <div class="container">
-        <div class="card">
-            <h2>Mis Estudiantes</h2>
-            <a th:href="@{/estudiantes/nuevo}" class="btn">+ Registrar nuevo estudiante</a>
-
-            <table>
-                <thead>
-                    <tr><th>Nombre</th><th>Edad</th><th>Acciones</th></tr>
-                </thead>
-                <tbody>
-                    <tr th:each="est : ${estudiantes}">
-                        <td th:text="${est.nombreCompleto}"></td>
-                        <td th:text="${est.edad}"></td>
-                        <td>
-                            <a th:href="@{/estudiantes/{id}(id=${est.id})}" class="btn">Ver</a>
-                            <a th:href="@{/comidas/{id}(id=${est.id})}" class="btn">Comidas</a>
-                            <a th:href="@{/hematologia/{id}(id=${est.id})}" class="btn">Hematología</a>
-                            <a th:href="@{/recomendaciones/{id}(id=${est.id})}" class="btn">Recomendaciones IA</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+<div th:replace="~{fragments :: header}"></div>
+<div th:replace="~{fragments :: navbar}"></div>
+<div class="container-estudiantes">
+    <!-- TÍTULO -->
+    <div class="header-page">
+        <h2>Mis Estudiantes</h2>
+        <p>Monitoreo nutricional y prevención de anemia</p>
+        <a th:href="@{/estudiantes/nuevo}" class="btn-nuevo">
+        ➕ Registrar estudiante
+    </a>
+    </div>
+    <!-- ESTADÍSTICAS -->
+    <div class="stats">
+        <div class="stat-card">
+            <h3 th:text="${#lists.size(estudiantes)}">0</h3>
+            <span>Total estudiantes</span>
+        </div>
+        <div class="stat-card riesgo-alto">
+            <h3 th:text="${alto}">0</h3>
+            <span>Alto riesgo</span>
+        </div>
+        <div class="stat-card riesgo-medio">
+            <h3 th:text="${medio}">0</h3>
+            <span>Riesgo medio</span>
+        </div>
+        <div class="stat-card riesgo-bajo">
+            <h3 th:text="${bajo}">0</h3>
+            <span>Bajo riesgo</span>
         </div>
     </div>
-
-    <div th:replace="~{fragments :: footer}"></div>
+    <!-- TARJETAS -->
+    <div class="grid-estudiantes">
+        <div class="card-estudiante"
+             th:each="est : ${estudiantes}"
+             th:classappend="${
+                !#lists.isEmpty(est.analisisHematologicos)
+                ?
+                (
+                    est.analisisHematologicos[est.analisisHematologicos.size()-1].hemoglobina < 9
+                    ? ' riesgo-alto'
+                    :
+                    (
+                        est.analisisHematologicos[est.analisisHematologicos.size()-1].hemoglobina < 12
+                        ? ' riesgo-medio'
+                        : ' riesgo-bajo'
+                    )
+                )
+                : ''
+             }">
+            <!-- CABECERA -->
+            <div class="info-principal">
+                <div class="avatar"
+                     th:text="${#strings.substring(est.nombreCompleto,0,2).toUpperCase()}">
+                    JO
+                </div>
+                <div>
+                    <h3 th:text="${est.nombreCompleto}">
+                        José
+                    </h3>
+                    <span th:text="${est.edad + ' años'}">
+                        3 años
+                    </span>
+                    <small class="ultima-visita"
+                           th:if="${!#lists.isEmpty(est.analisisHematologicos)}">
+                        · Último análisis:
+                        <span th:text="${est.analisisHematologicos[est.analisisHematologicos.size()-1].fecha}">
+                        </span>
+                    </small>
+                    <small class="ultima-visita"
+                           th:if="${#lists.isEmpty(est.analisisHematologicos)}">
+                        · Sin análisis registrados
+                    </small>
+                </div>
+            </div>
+            <!-- RIESGO -->
+            <span class="badge-riesgo badge-alto"
+                  th:if="${!#lists.isEmpty(est.analisisHematologicos) and est.analisisHematologicos[est.analisisHematologicos.size()-1].hemoglobina < 9}">
+                Alto riesgo
+            </span>
+            <span class="badge-riesgo badge-medio"
+                  th:if="${!#lists.isEmpty(est.analisisHematologicos) and est.analisisHematologicos[est.analisisHematologicos.size()-1].hemoglobina >= 9 and est.analisisHematologicos[est.analisisHematologicos.size()-1].hemoglobina < 12}">
+                Riesgo medio
+            </span>
+            <span class="badge-riesgo badge-bajo"
+                  th:if="${!#lists.isEmpty(est.analisisHematologicos) and est.analisisHematologicos[est.analisisHematologicos.size()-1].hemoglobina >= 12}">
+                Bajo riesgo
+            </span>
+            <span class="badge-riesgo"
+                  th:if="${#lists.isEmpty(est.analisisHematologicos)}">
+                Sin evaluación
+            </span>
+            <!-- HEMOGLOBINA -->
+            <div class="hemo">
+                <div class="titulo-hemo">
+                    <span>Hemoglobina</span>
+                    <strong
+                        th:if="${!#lists.isEmpty(est.analisisHematologicos)}"
+                        th:text="${est.analisisHematologicos[est.analisisHematologicos.size()-1].hemoglobina + ' g/dL'}">
+                    </strong>
+                    <strong
+                        th:if="${#lists.isEmpty(est.analisisHematologicos)}">
+                        Sin datos
+                    </strong>
+                </div>
+                <div class="barra">
+                    <div class="progreso progreso-alto"
+                         th:if="${!#lists.isEmpty(est.analisisHematologicos) and est.analisisHematologicos[est.analisisHematologicos.size()-1].hemoglobina < 10}">
+                    </div>
+                    <div class="progreso progreso-medio"
+                         th:if="${!#lists.isEmpty(est.analisisHematologicos) and est.analisisHematologicos[est.analisisHematologicos.size()-1].hemoglobina >= 10 and est.analisisHematologicos[est.analisisHematologicos.size()-1].hemoglobina < 12}">
+                    </div>
+                    <div class="progreso progreso-bajo"
+                         th:if="${!#lists.isEmpty(est.analisisHematologicos) and est.analisisHematologicos[est.analisisHematologicos.size()-1].hemoglobina >= 12}">
+                    </div>
+                </div>
+                <small class="normal-hemo">
+                    La hemoglobina normal es de 12–14 g/dL
+                </small>
+            </div>
+            <!-- ACCIONES -->
+            <div class="acciones">
+                <a th:href="@{/estudiantes/{id}(id=${est.id})}">
+                    Ver
+                </a>
+                <a th:href="@{/comidas/{id}(id=${est.id})}">
+                    Comidas
+                </a>
+                <a th:href="@{/hematologia/{id}(id=${est.id})}">
+                    Hematol.
+                </a>
+                <a th:href="@{/recomendaciones/{id}(id=${est.id})}"
+                   class="btn-ia">
+                    IA
+                </a>
+                <!-- NUEVO ENLACE A GRÁFICOS -->
+                <a th:href="@{/graficos/{id}(id=${est.id})}"
+                   class="btn-ia">
+                    📊 Gráficos
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- PIE -->
+    <div class="footer-info">
+        Mostrando
+        <strong th:text="${#lists.size(estudiantes)}">0</strong>
+        estudiantes registrados
+    </div>
+</div>
+<div th:replace="~{fragments :: footer}"></div>
 </body>
 </html>

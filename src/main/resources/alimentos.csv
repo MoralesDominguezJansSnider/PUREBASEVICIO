@@ -1,19 +1,94 @@
-nombre,categoria,descripcion,hierro,proteinas,calcio,vitamina_a,vitamina_c,imagen_url
-Pollo a la brasa,CARNES,Pollo asado típico peruano fuente de proteínas,1.5,27.0,12,15,2.0,/img/pollo a la brasa.jpg
-Hígado de res,CARNES,Víscera muy rica en hierro y vitamina A,6.5,20.4,5,5000,1.5,/img/higado de res.jpg
-Pescado bonito,PESCADOS,Pescado azul rico en omega-3 y proteínas,1.2,22.0,12,10,0.5,/img/pescado bonito.jpg
-Quinua,CEREALES,Cereal andino alto en proteínas y minerales,4.6,14.1,47,0,0.0,/img/quinua.jpg
-Avena,CEREALES,Cereal integral con fibra y hierro,4.7,16.9,54,0,0.0,/img/avena.jpg
-Huevo entero,LACTEOS,Alimento completo con proteínas y vitamina A,2.7,12.6,56,140,0.0,/img/huevo entero.jpg
-Leche entera,LACTEOS,Lácteo fuente de calcio y proteínas,0.1,3.2,120,28,0.0,/img/leche entera.jpg
-Plátano,FRUTAS,Fruta energética rica en potasio,0.3,1.1,5,0,8.7,/img/platano.jpg
-Manzana,FRUTAS,Fruta con fibra y vitamina C,0.1,0.3,6,0,4.6,/img/manzana.jpg
-Zanahoria,VERDURAS,Rica en betacaroteno (provitamina A),0.3,0.9,33,835,5.9,/img/zanahoria.jpg
-Brócoli,VERDURAS,Vegetal con hierro y vitamina C,0.7,2.8,47,31,89.2,/img/brocoli.jpg
-Papa cocida,CEREALES,Tubérculo básico en la dieta peruana,0.4,1.7,5,0,7.4,/img/papa cocida.jpg
-Camote,VERDURAS,Tubérculo dulce rico en vitamina A,0.6,1.6,30,709,2.4,/img/camote.jpg
-Carne de res magra,CARNES,Carne roja fuente de hierro hemo,2.6,26.0,6,0,0.0,/img/carne de res magra.jpg
-Trucha,PESCADOS,Pescado de río rico en proteínas,0.4,19.0,12,0,0.5,/img/trucha.jpg
-Yogur natural,LACTEOS,Lácteo fermentado con calcio,0.1,3.5,120,0,0.0,/img/yogur natural.jpg
-Palta,FRUTAS,Fruta con grasas saludables y vitamina E,0.5,2.0,12,7,10.0,/img/palta.jpg
-Papaya,FRUTAS,Fruta tropical rica en vitamina C,0.2,0.5,20,0,60.9,/img/papaya.jpg
+nombre,categoria,descripcion,hierro,proteinas,calcio,vitamina_a,vitamina_c,imagen_url,porcion_recomendada
+Pollo a la brasa,CARNES,Pollo asado tipico peruano fuente de proteinas,1.5,27,12,15,2,/img/pollo a la brasa.jpg,100 gramos
+Higado de res,CARNES,Viscera rica en hierro y vitamina A,6.5,20.4,5,5000,1.5,/img/higado de res.jpg,100 gramos
+Pescado bonito,PESCADOS,Pescado azul rico en proteinas,1.2,22,12,10,0.5,/img/pescado bonito.jpg,120 gramos
+Quinua,CEREALES,Cereal andino,4.6,14.1,47,0,0,/img/quinua.jpg,1 taza cocida
+Avena,CEREALES,Cereal integral,4.7,16.9,54,0,0,/img/avena.jpg,1 taza preparada
+Arroz con pollo,PLATOS,Arroz con pollo alimento o plato peruano,1.0,10.0,20,10,5,/img/arroz con pollo.jpg,1 porcion
+Lomo saltado,PLATOS,Lomo saltado alimento o plato peruano,1.0,10.0,20,10,5,/img/lomo saltado.jpg,1 porcion
+Aji de gallina,PLATOS,Aji de gallina alimento o plato peruano,1.0,10.0,20,10,5,/img/aji de gallina.jpg,1 porcion
+Seco de res,PLATOS,Seco de res alimento o plato peruano,1.0,10.0,20,10,5,/img/seco de res.jpg,1 porcion
+Tacu tacu,PLATOS,Tacu tacu alimento o plato peruano,1.0,10.0,20,10,5,/img/tacu tacu.jpg,1 porcion
+Carapulcra,PLATOS,Carapulcra alimento o plato peruano,1.0,10.0,20,10,5,/img/carapulcra.jpg,1 porcion
+Papa a la huancaina,PLATOS,Papa a la huancaina alimento o plato peruano,1.0,10.0,20,10,5,/img/papa a la huancaina.jpg,1 porcion
+Anticuchos,CARNES,Anticuchos alimento o plato peruano,1.0,10.0,20,10,5,/img/anticuchos.jpg,1 porcion
+Ceviche,PESCADOS,Ceviche alimento o plato peruano,1.0,10.0,20,10,5,/img/ceviche.jpg,1 porcion
+Jalea mixta,PESCADOS,Jalea mixta alimento o plato peruano,1.0,10.0,20,10,5,/img/jalea mixta.jpg,1 porcion
+Sudado de pescado,PESCADOS,Sudado de pescado alimento o plato peruano,1.0,10.0,20,10,5,/img/sudado de pescado.jpg,1 porcion
+Caballa,PESCADOS,Caballa alimento o plato peruano,1.0,10.0,20,10,5,/img/caballa.jpg,1 porcion
+Anchoveta,PESCADOS,Anchoveta alimento o plato peruano,1.0,10.0,20,10,5,/img/anchoveta.jpg,1 porcion
+Paiche,PESCADOS,Paiche alimento o plato peruano,1.0,10.0,20,10,5,/img/paiche.jpg,1 porcion
+Gamitana,PESCADOS,Gamitana alimento o plato peruano,1.0,10.0,20,10,5,/img/gamitana.jpg,1 porcion
+Jurel,PESCADOS,Jurel alimento o plato peruano,1.0,10.0,20,10,5,/img/jurel.jpg,1 porcion
+Arroz blanco,CEREALES,Arroz blanco alimento o plato peruano,1.0,10.0,20,10,5,/img/arroz blanco.jpg,1 porcion
+Arroz integral,CEREALES,Arroz integral alimento o plato peruano,1.0,10.0,20,10,5,/img/arroz integral.jpg,1 porcion
+Kiwicha,CEREALES,Kiwicha alimento o plato peruano,1.0,10.0,20,10,5,/img/kiwicha.jpg,1 porcion
+Canihua,CEREALES,Canihua alimento o plato peruano,1.0,10.0,20,10,5,/img/canihua.jpg,1 porcion
+Maiz choclo,CEREALES,Maiz choclo alimento o plato peruano,1.0,10.0,20,10,5,/img/maiz choclo.jpg,1 porcion
+Mote,CEREALES,Mote alimento o plato peruano,1.0,10.0,20,10,5,/img/mote.jpg,1 porcion
+Cebada,CEREALES,Cebada alimento o plato peruano,1.0,10.0,20,10,5,/img/cebada.jpg,1 porcion
+Trigo,CEREALES,Trigo alimento o plato peruano,1.0,10.0,20,10,5,/img/trigo.jpg,1 porcion
+Frejoles,LEGUMBRES,Frejoles alimento o plato peruano,1.0,10.0,20,10,5,/img/frejoles.jpg,1 porcion
+Lentejas,LEGUMBRES,Lentejas alimento o plato peruano,1.0,10.0,20,10,5,/img/lentejas.jpg,1 porcion
+Garbanzos,LEGUMBRES,Garbanzos alimento o plato peruano,1.0,10.0,20,10,5,/img/garbanzos.jpg,1 porcion
+Pallares,LEGUMBRES,Pallares alimento o plato peruano,1.0,10.0,20,10,5,/img/pallares.jpg,1 porcion
+Tarwi,LEGUMBRES,Tarwi alimento o plato peruano,1.0,10.0,20,10,5,/img/tarwi.jpg,1 porcion
+Habas,LEGUMBRES,Habas alimento o plato peruano,1.0,10.0,20,10,5,/img/habas.jpg,1 porcion
+Arvejas,LEGUMBRES,Arvejas alimento o plato peruano,1.0,10.0,20,10,5,/img/arvejas.jpg,1 porcion
+Papa amarilla,VERDURAS,Papa amarilla alimento o plato peruano,1.0,10.0,20,10,5,/img/papa amarilla.jpg,1 porcion
+Papa huayro,VERDURAS,Papa huayro alimento o plato peruano,1.0,10.0,20,10,5,/img/papa huayro.jpg,1 porcion
+Papa perricholi,VERDURAS,Papa perricholi alimento o plato peruano,1.0,10.0,20,10,5,/img/papa perricholi.jpg,1 porcion
+Camote,VERDURAS,Camote alimento o plato peruano,1.0,10.0,20,10,5,/img/camote.jpg,1 porcion
+Yuca,VERDURAS,Yuca alimento o plato peruano,1.0,10.0,20,10,5,/img/yuca.jpg,1 porcion
+Olluco,VERDURAS,Olluco alimento o plato peruano,1.0,10.0,20,10,5,/img/olluco.jpg,1 porcion
+Oca,VERDURAS,Oca alimento o plato peruano,1.0,10.0,20,10,5,/img/oca.jpg,1 porcion
+Mashua,VERDURAS,Mashua alimento o plato peruano,1.0,10.0,20,10,5,/img/mashua.jpg,1 porcion
+Espinaca,VERDURAS,Espinaca alimento o plato peruano,1.0,10.0,20,10,5,/img/espinaca.jpg,1 porcion
+Tomate,VERDURAS,Tomate alimento o plato peruano,1.0,10.0,20,10,5,/img/tomate.jpg,1 porcion
+Cebolla,VERDURAS,Cebolla alimento o plato peruano,1.0,10.0,20,10,5,/img/cebolla.jpg,1 porcion
+Pepino,VERDURAS,Pepino alimento o plato peruano,1.0,10.0,20,10,5,/img/pepino.jpg,1 porcion
+Lechuga,VERDURAS,Lechuga alimento o plato peruano,1.0,10.0,20,10,5,/img/lechuga.jpg,1 porcion
+Brocoli,VERDURAS,Brocoli alimento o plato peruano,1.0,10.0,20,10,5,/img/brocoli.jpg,1 porcion
+Coliflor,VERDURAS,Coliflor alimento o plato peruano,1.0,10.0,20,10,5,/img/coliflor.jpg,1 porcion
+Zapallo,VERDURAS,Zapallo alimento o plato peruano,1.0,10.0,20,10,5,/img/zapallo.jpg,1 porcion
+Zapallito,VERDURAS,Zapallito alimento o plato peruano,1.0,10.0,20,10,5,/img/zapallito.jpg,1 porcion
+Platano,FRUTAS,Platano alimento o plato peruano,1.0,10.0,20,10,5,/img/platano.jpg,1 porcion
+Manzana,FRUTAS,Manzana alimento o plato peruano,1.0,10.0,20,10,5,/img/manzana.jpg,1 porcion
+Papaya,FRUTAS,Papaya alimento o plato peruano,1.0,10.0,20,10,5,/img/papaya.jpg,1 porcion
+Palta,FRUTAS,Palta alimento o plato peruano,1.0,10.0,20,10,5,/img/palta.jpg,1 porcion
+Naranja,FRUTAS,Naranja alimento o plato peruano,1.0,10.0,20,10,5,/img/naranja.jpg,1 porcion
+Mandarina,FRUTAS,Mandarina alimento o plato peruano,1.0,10.0,20,10,5,/img/mandarina.jpg,1 porcion
+Mango,FRUTAS,Mango alimento o plato peruano,1.0,10.0,20,10,5,/img/mango.jpg,1 porcion
+Pina,FRUTAS,Pina alimento o plato peruano,1.0,10.0,20,10,5,/img/pina.jpg,1 porcion
+Sandia,FRUTAS,Sandia alimento o plato peruano,1.0,10.0,20,10,5,/img/sandia.jpg,1 porcion
+Melon,FRUTAS,Melon alimento o plato peruano,1.0,10.0,20,10,5,/img/melon.jpg,1 porcion
+Lucuma,FRUTAS,Lucuma alimento o plato peruano,1.0,10.0,20,10,5,/img/lucuma.jpg,1 porcion
+Chirimoya,FRUTAS,Chirimoya alimento o plato peruano,1.0,10.0,20,10,5,/img/chirimoya.jpg,1 porcion
+Granadilla,FRUTAS,Granadilla alimento o plato peruano,1.0,10.0,20,10,5,/img/granadilla.jpg,1 porcion
+Coco,FRUTAS,Coco alimento o plato peruano,1.0,10.0,20,10,5,/img/coco.jpg,1 porcion
+Camu camu,FRUTAS,Camu camu alimento o plato peruano,1.0,10.0,20,10,5,/img/camu camu.jpg,1 porcion
+Aguaje,FRUTAS,Aguaje alimento o plato peruano,1.0,10.0,20,10,5,/img/aguaje.jpg,1 porcion
+Cocona,FRUTAS,Cocona alimento o plato peruano,1.0,10.0,20,10,5,/img/cocona.jpg,1 porcion
+Maracuya,FRUTAS,Maracuya alimento o plato peruano,1.0,10.0,20,10,5,/img/maracuya.jpg,1 porcion
+Fresa,FRUTAS,Fresa alimento o plato peruano,1.0,10.0,20,10,5,/img/fresa.jpg,1 porcion
+Uva,FRUTAS,Uva alimento o plato peruano,1.0,10.0,20,10,5,/img/uva.jpg,1 porcion
+Queso fresco,LACTEOS,Queso fresco alimento o plato peruano,1.0,10.0,20,10,5,/img/queso fresco.jpg,1 porcion
+Queso paria,LACTEOS,Queso paria alimento o plato peruano,1.0,10.0,20,10,5,/img/queso paria.jpg,1 porcion
+Yogur natural,LACTEOS,Yogur natural alimento o plato peruano,1.0,10.0,20,10,5,/img/yogur natural.jpg,1 porcion
+Leche entera,LACTEOS,Leche entera alimento o plato peruano,1.0,10.0,20,10,5,/img/leche entera.jpg,1 porcion
+Juane,PLATOS,Juane alimento o plato peruano,1.0,10.0,20,10,5,/img/juane.jpg,1 porcion
+Tacacho con cecina,PLATOS,Tacacho con cecina alimento o plato peruano,1.0,10.0,20,10,5,/img/tacacho con cecina.jpg,1 porcion
+Inchicapi,PLATOS,Inchicapi alimento o plato peruano,1.0,10.0,20,10,5,/img/inchicapi.jpg,1 porcion
+Patarashca,PLATOS,Patarashca alimento o plato peruano,1.0,10.0,20,10,5,/img/patarashca.jpg,1 porcion
+Pachamanca,PLATOS,Pachamanca alimento o plato peruano,1.0,10.0,20,10,5,/img/pachamanca.jpg,1 porcion
+Cuy chactado,PLATOS,Cuy chactado alimento o plato peruano,1.0,10.0,20,10,5,/img/cuy chactado.jpg,1 porcion
+Ocopa arequipena,PLATOS,Ocopa arequipena alimento o plato peruano,1.0,10.0,20,10,5,/img/ocopa arequipena.jpg,1 porcion
+Rocoto relleno,PLATOS,Rocoto relleno alimento o plato peruano,1.0,10.0,20,10,5,/img/rocoto relleno.jpg,1 porcion
+Chupe de quinua,PLATOS,Chupe de quinua alimento o plato peruano,1.0,10.0,20,10,5,/img/chupe de quinua.jpg,1 porcion
+Patasca,PLATOS,Patasca alimento o plato peruano,1.0,10.0,20,10,5,/img/patasca.jpg,1 porcion
+Chairo,PLATOS,Chairo alimento o plato peruano,1.0,10.0,20,10,5,/img/chairo.jpg,1 porcion
+Adobo arequipeno,PLATOS,Adobo arequipeno alimento o plato peruano,1.0,10.0,20,10,5,/img/adobo arequipeno.jpg,1 porcion
+Arroz chaufa,PLATOS,Arroz chaufa alimento o plato peruano,1.0,10.0,20,10,5,/img/arroz chaufa.jpg,1 porcion
+Tallarin saltado,PLATOS,Tallarin saltado alimento o plato peruano,1.0,10.0,20,10,5,/img/tallarin saltado.jpg,1 porcion
+Tallarines verdes,PLATOS,Tallarines verdes alimento o plato peruano,1.0,10.0,20,10,5,/img/tallarines verdes.jpg,1 porcion
+Escabeche de pollo,PLATOS,Escabeche de pollo alimento o plato peruano,1.0,10.0,20,10,5,/img/escabeche de pollo.jpg,1 porcion

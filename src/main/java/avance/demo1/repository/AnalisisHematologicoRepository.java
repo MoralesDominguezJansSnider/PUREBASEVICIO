@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface AnalisisHematologicoRepository extends JpaRepository<AnalisisHematologico, Long> {
     List<AnalisisHematologico> findByEstudianteId(Long estudianteId);
+    List<AnalisisHematologico> findByEstudianteIdOrderByFechaAsc(Long estudianteId);
 }
